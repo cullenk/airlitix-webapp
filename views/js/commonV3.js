@@ -36,6 +36,14 @@ let colorERROR   = 1; // ERROR   font color is RED
 let colorSUCCESS = 2; // SUCCESS font color is GREEN
 let colorINFO    = 3; // INFOR   font color is BLUE
 
+let colorToHTML = {
+  0: 'black',
+  1: 'red',
+  2: 'green',
+  3: 'blue'
+};
+
+
 $(document).ready(() => {
 
     let wifiClient = '';
@@ -113,7 +121,8 @@ $(document).ready(() => {
       objectToIOT.office_name = officeName;
       objectToIOT.greenHouse_name = element.parentElement.querySelector("h2").innerHTML;
       objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
-      objectToIOT.bay_name = 'Bay 1'; // It's default selected
+      // objectToIOT.bay_name = 'Bay 1'; // It's default selected
+      objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
       appendStatus(objectToIOT, colorINFO);
     });
 
@@ -124,7 +133,9 @@ $(document).ready(() => {
       objectToIOT.office_name = officeName;
       objectToIOT.greenHouse_name = element.currentTarget.children[0].innerHTML;
       objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
-      objectToIOT.bay_name = 'Bay 1'; // It's default selected
+      // objectToIOT.bay_name = 'Bay 1'; // It's default selected
+      objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
+
       // set Selected GH Name in LOCATION
       document.querySelector("#gh-outcome-num").innerHTML = document.querySelector("#greenhouse-1-view > div.bay-info-div > div.bay-heading-div > h1").innerHTML;
       // set Selected BAY Name in LOCATION
@@ -295,20 +306,25 @@ $(document).ready(() => {
 // Add WATER ICON before BAY location text
 function addWaterIcon(objectToIOT) {
     // If MAP ICON is up, remove it
+    
+    let greenHouseNumber = +objectToIOT.greenHouse_name.split(" ")[1];
+    
     if (mapIconFLAG == true) {
-        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)").remove();
+        document.querySelector(`#greenhouse-${greenHouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)`).remove();
         mapIconFLAG = false;
     }
     // If WATER ICON is NOT up, add it
     if (waterIconFLAG == false) {
         var el = document.createElement("div");
         el.className = "bay-icon-container-water";
-        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY WATER: ";
-        $(document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2")).before(el);
+        document.querySelector(`#greenhouse-${greenHouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
+        $(document.querySelector(`#greenhouse-${greenHouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
         waterIconFLAG = true;
     }
     // Set TARGETTYPE to BAYWATER
     objectToIOT.targetType = BAYWATER_MODULE_TYPE;
+    document.getElementsByClassName('mapping-container')[greenHouseNumber-1].style.display = "none";
+    document.getElementsByClassName('water-panel-container')[greenHouseNumber-1].style.display = "block";
 }
 
 // Add MAP ICON before BAY location text
@@ -328,6 +344,8 @@ function addMapIcon(objectToIOT) {
     }
     // Set TARGETTYPE to BAYMAP
     objectToIOT.targetType = BAYMAP_MODULE_TYPE;
+    document.getElementsByClassName('water-panel-container')[+objectToIOT.greenHouse_name.split(" ")[1]-1].style.display = "none";
+    document.getElementsByClassName('mapping-container')[+objectToIOT.greenHouse_name.split(" ")[1]-1].style.display = "block";
 }
 
 // Print colored "msg" to LOG text box
@@ -335,45 +353,48 @@ function appendLogs(msg, color) {
     console.table('appendLogs', msg);
 
     if ($('.log-div').length) {
-        $('.log-div').append(`<div class='log-text-content'>${JSON.stringify(msg)}</div>`);
+        $('.log-div').append(`<div class='log-text-content' style="color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
+        try {
+          $(".log-div").scrollTop($(".log-div")[1].scrollHeight);
+        } catch {}
         // IF USER MODE
-        if (document.getElementsByClassName('admin').length == 0) {
-            switch (color) {
-                case colorERROR:
-                    document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: red');
-                    break;
-                case colorSUCCESS:
-                    document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: green');
-                    break;
-                case colorINFO:
-                    document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: blue');
-                    break;
-                default:
-                    // leave font color as BLACK
-                    break;
-            }
-            // scroll into view
-            document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.scrollIntoViewIfNeeded();
-        }
+        // if (document.getElementsByClassName('admin').length == 0) {
+        //     switch (color) {
+        //         case colorERROR:
+        //             document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: red');
+        //             break;
+        //         case colorSUCCESS:
+        //             document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: green');
+        //             break;
+        //         case colorINFO:
+        //             document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: blue');
+        //             break;
+        //         default:
+        //             // leave font color as BLACK
+        //             break;
+        //     }
+        //     // scroll into view
+        //     document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.scrollIntoViewIfNeeded();
+        // }
         // ELSE ADMIN MODE (document.getElementsByClassName('admin').length == 2)
-        else {
-            switch (color) {
-                case colorERROR:
-                    document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: red');
-                    break;
-                case colorSUCCESS:
-                    document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: green');
-                    break;
-                case colorINFO:
-                    document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: blue');
-                    break;
-                default:
-                    // leave font color as BLACK
-                    break;
-            }
-            // scroll into view
-            document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.scrollIntoViewIfNeeded();
-        }
+        // else {
+        //     switch (color) {
+        //         case colorERROR:
+        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: red');
+        //             break;
+        //         case colorSUCCESS:
+        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: green');
+        //             break;
+        //         case colorINFO:
+        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: blue');
+        //             break;
+        //         default:
+        //             // leave font color as BLACK
+        //             break;
+        //     }
+        //     // scroll into view
+        //     document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.scrollIntoViewIfNeeded();
+        // }
     }
 }
 
@@ -382,48 +403,50 @@ function appendStatus(msg, color) {
     console.table('appendStatus', msg);
 
     if ($('.status-div').length) {
-        $('.status-div').append(`<div class='status-text-content'>${JSON.stringify(msg)}</div>`);
+        $('.status-div').append(`<div class='status-text-content' style="color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
-          $(".status-div").scrollTop($(".status-div")[3].scrollHeight);
+          $(".status-div").scrollTop($(".status-div")[1].scrollHeight);
         } catch {}
         // IF USER MODE
-        if (document.getElementsByClassName('admin').length == 0) {
-            switch (color) {
-                case colorERROR:
-                    document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: red');
-                    break;
-                case colorSUCCESS:
-                    document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: green');
-                    break;
-                case colorINFO:
-                    document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: blue');
-                    break;
-                default:
-                    // leave font color as BLACK
-                    break;
-            }
+        // if (document.getElementsByClassName('admin').length == 0) {
+        //   document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', `color: ${colorToHTML[color]}`);
+
+          // switch (color) {
+          //       case colorERROR:
+          //           document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: red');
+          //           break;
+          //       case colorSUCCESS:
+          //           document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: green');
+          //           break;
+          //       case colorINFO:
+          //           document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: blue');
+          //           break;
+          //       default:
+          //           // leave font color as BLACK
+          //           break;
+          //   }
             // scroll into view
-            document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.scrollIntoViewIfNeeded();
-        }
+            // document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.scrollIntoViewIfNeeded();
+        // }
         // ELSE ADMIN MODE (document.getElementsByClassName('admin').length == 2)
-        else {
-            switch (color) {
-                case colorERROR:
-                    document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: red');
-                    break;
-                case colorSUCCESS:
-                    document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: green');
-                    break;
-                case colorINFO:
-                    document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: blue');
-                    break;
-                default:
-                    // leave font color as BLACK
-                    break;
-            }
-            // scroll into view
-            document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.scrollIntoViewIfNeeded();
-        }
+        // else {
+        //     switch (color) {
+        //         case colorERROR:
+        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: red');
+        //             break;
+        //         case colorSUCCESS:
+        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: green');
+        //             break;
+        //         case colorINFO:
+        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: blue');
+        //             break;
+        //         default:
+        //             // leave font color as BLACK
+        //             break;
+        //     }
+        //     // scroll into view
+        //     document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.scrollIntoViewIfNeeded();
+        // }
     }
 }
 

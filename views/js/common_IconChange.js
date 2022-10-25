@@ -316,6 +316,10 @@ function addWaterIcon() {
     }
     // Set TARGETTYPE to BAYWATER
     objectToIOT.targetType = BAYWATER_MODULE_TYPE;
+    document.getElementsByClassName('water-panel-container')[+objectToIOT.greenhouse_name.split(" ")[1]].style.display = "block";
+
+//    +"GREENHOUSE 1".split(' ')[1]
+
 // ===> SET MAP   Display:Style to "NONE"  : <div class="map-panel-container" style="display: none;">
 // ===> SET WATER Display:Style to "BLOCK" : <div class="water-panel-container" style="display: block;">
 }
