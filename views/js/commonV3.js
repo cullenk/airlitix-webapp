@@ -1,33 +1,34 @@
 // COMMANDS
-let CMD_GET_LCD_DATA = 11 // Get LCD DATA
-let CMD_SET_LCD_DATA = 12 // Set LCD DATA
-let CMD_RET_LCD_DATA = 13 // Return LCD DATA
-let CMD_GET_MAP_DATA = 21 // Get MAP DATA
-let CMD_SET_MAP_DATA = 22 // Set MAP DATA
-let CMD_RET_MAP_DATA = 23 // Return MAP DATA
-let CMD_GET_WIFI_STATUS = 31 // Get WIFI STATUS
-let CMD_SET_WIFI_STATUS = 32 // Set WIFI STATUS
-let CMD_RET_WIFI_STATUS = 33 // Return WIFI STATUS
-let CMD_GET_WIFI_CONFIG = 41 // Get WIFI CONFIG
-let CMD_SET_WIFI_CONFIG = 42 // Set WIFI CONFIG
-let CMD_RET_WIFI_CONFIG = 43 // Return WIFI CONFIG
-let CMD_GET_MPU_STATUS = 51 // Get MPU STATUS
-let CMD_SET_MPU_STATUS = 52 // Set MPU STATUS
-let CMD_RET_MPU_STATUS = 53 // Return MPU STATUS
-let CMD_GET_MPU_CONFIG = 61 // Get MPU CONFIG
-let CMD_SET_MPU_CONFIG = 62 // Set MPU CONFIG
-let CMD_RET_MPU_CONFIG = 63 // Return MPU CONFIG
-let CMD_RET_LOG = 91 // Return LOG
-let CMD_RET_STATUS = 92 // Return STATUS
+let CMD_RESERVED_0        = 0  // RESERVED
+let CMD_GET_LCD_DATA      = 1  // Get LCD DATA
+let CMD_SET_LCD_DATA      = 2  // Set LCD DATA
+let CMD_RET_LCD_DATA      = 3  // Return LCD DATA
+let CMD_GET_MAP_DATA      = 4  // Get MAP DATA
+let CMD_SET_MAP_DATA      = 5  // Set MAP DATA
+let CMD_RET_MAP_DATA      = 6  // Return MAP DATA
+let CMD_GET_LORA_STATUS   = 7  // Get LORA STATUS
+let CMD_SET_LORA_STATUS   = 8  // Set LORA STATUS
+let CMD_RET_LORA_STATUS   = 9  // Return LORA STATUS
+let CMD_GET_LORA_CONFIG   = 10 // Get LORA CONFIG
+let CMD_SET_LORA_CONFIG   = 11 // Set LORA CONFIG
+let CMD_RET_LORA_CONFIG   = 12 // Return LORA CONFIG
+let CMD_GET_MCU_STATUS    = 13 // Get MCU STATUS
+let CMD_SET_MCU_STATUS    = 14 // Set MCU STATUS
+let CMD_RET_MCU_STATUS    = 15 // Return MCU STATUS
+let CMD_GET_MCU_CONFIG    = 16 // Get MCU CONFIG
+let CMD_SET_MCU_CONFIG    = 17 // Set MCU CONFIG
+let CMD_RET_MCU_CONFIG    = 18 // Return MCU CONFIG
+let CMD_RET_LOG           = 19 // Return LOG
+let CMD_RET_STATUS        = 20 // Return STATUS
 
 // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
-let OFFICE_MODULE_TYPE = 1
+let OFFICE_MODULE_TYPE     = 1
 let GREENHOUSE_MODULE_TYPE = 2
-let BAYWATER_MODULE_TYPE = 3
-let BAYMAP_MODULE_TYPE = 4
+let BAYWATER_MODULE_TYPE   = 3
+let BAYMAP_MODULE_TYPE     = 4
 
 // FLAGS for WATER and MAP icons in LOCATION CONTAINER
-let mapIconFLAG = false;
+let mapIconFLAG   = false;
 let waterIconFLAG = false;
 
 // Set color variables for FONT colors
@@ -43,6 +44,24 @@ let colorToHTML = {
   3: 'blue'
 };
 
+// structure to IOT
+let objectToIOT = {
+  office_name: '',     // OFFICE_NAME
+  greenhouse_name: '', // greenhouse_NAME
+  bay_name: '',        // BAY_NAME
+  targetType: '',      // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
+  command: '',         // COMMAND
+  data: ''             // DATA: KEYPAD input
+};
+
+// structure from IOT
+let objectFromIOT = {
+  command: '', // COMMAND
+  data1: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE1
+  data2: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE2
+  data3: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE3
+  data4: ''    // LCD, MAP, MPU, WiFi, LOG return data LINE4
+};
 
 $(document).ready(() => {
 
@@ -69,7 +88,7 @@ $(document).ready(() => {
     });
     socket.on('WIFI-CLIENT-DISCONNECTED', (data) => {
       wifiClient = '';
-      appendLogs(`WIFI Client ${data.socketId} disconnected.`, colorINFO);
+      appendLogs(`WIFI Client ${data.socketId} disconnected.`, colorERROR);
     });
 
     socket.on('message', (data) => {
@@ -84,32 +103,13 @@ $(document).ready(() => {
       type: 'WEB'
     });
 
-    // structure to IOT
-    let objectToIOT = {
-      office_name: '',     // OFFICE_NAME
-      greenHouse_name: '', // GREENHOUSE_NAME
-      bay_name: '',        // BAY_NAME
-      targetType: '',     // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
-      command: '',        // COMMAND
-      data: ''            // DATA: KEYPAD input
-    };
-
-    // structure from IOT
-    let objectFromIOT = {
-      command: '', // COMMAND
-      data1: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE1
-      data2: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE2
-      data3: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE3
-      data4: ''    // LCD, MAP, MPU, WiFi, LOG return data LINE4
-    };
-
     // OFFICE GEAR selected (ADMIN mode) 
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
       // set objectToIOT variables
       // objectToIOT.office_name = document.querySelector('h3.office-title').innerHTML;
       objectToIOT.office_name = officeName;
       objectToIOT.targetType = OFFICE_MODULE_TYPE;
-      objectToIOT.greenHouse_name = '';
+      objectToIOT.greenhouse_name = '';
       objectToIOT.bay_name = 'Bay 1'; // It's default selected
       appendStatus(objectToIOT, colorINFO);
     });
@@ -119,7 +119,7 @@ $(document).ready(() => {
       // set objectToIOT variables
       // objectForSocket.office_name = document.querySelector('h3.office-title').innerHTML;
       objectToIOT.office_name = officeName;
-      objectToIOT.greenHouse_name = element.parentElement.querySelector("h2").innerHTML;
+      objectToIOT.greenhouse_name = element.parentElement.querySelector("h2").innerHTML;
       objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
       // objectToIOT.bay_name = 'Bay 1'; // It's default selected
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
@@ -131,7 +131,7 @@ $(document).ready(() => {
       // set objectToIOT variables
       // objectToIOT.office_name = document.querySelector('h3.office-title').innerHTML;
       objectToIOT.office_name = officeName;
-      objectToIOT.greenHouse_name = element.currentTarget.children[0].innerHTML;
+      objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
       objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
       // objectToIOT.bay_name = 'Bay 1'; // It's default selected
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
@@ -305,30 +305,34 @@ $(document).ready(() => {
 
 // Add WATER ICON before BAY location text
 function addWaterIcon(objectToIOT) {
+    // Get selected greenhouse
+    let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+
     // If MAP ICON is up, remove it
-    
-    let greenHouseNumber = +objectToIOT.greenHouse_name.split(" ")[1];
-    
     if (mapIconFLAG == true) {
-        document.querySelector(`#greenhouse-${greenHouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)`).remove();
+        document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)`).remove();
         mapIconFLAG = false;
     }
     // If WATER ICON is NOT up, add it
     if (waterIconFLAG == false) {
         var el = document.createElement("div");
         el.className = "bay-icon-container-water";
-        document.querySelector(`#greenhouse-${greenHouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
-        $(document.querySelector(`#greenhouse-${greenHouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
+        document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
+        $(document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
         waterIconFLAG = true;
     }
     // Set TARGETTYPE to BAYWATER
     objectToIOT.targetType = BAYWATER_MODULE_TYPE;
-    document.getElementsByClassName('mapping-container')[greenHouseNumber-1].style.display = "none";
-    document.getElementsByClassName('water-panel-container')[greenHouseNumber-1].style.display = "block";
+    document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "none";
+    document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "block";
+    document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
 }
 
 // Add MAP ICON before BAY location text
 function addMapIcon(objectToIOT) {
+    // Get selected greenhouse
+    let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+
     // If WATER ICON is up, remove it
     if (waterIconFLAG == true) {
         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)").remove();
@@ -344,57 +348,22 @@ function addMapIcon(objectToIOT) {
     }
     // Set TARGETTYPE to BAYMAP
     objectToIOT.targetType = BAYMAP_MODULE_TYPE;
-    document.getElementsByClassName('water-panel-container')[+objectToIOT.greenHouse_name.split(" ")[1]-1].style.display = "none";
-    document.getElementsByClassName('mapping-container')[+objectToIOT.greenHouse_name.split(" ")[1]-1].style.display = "block";
+    document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "none";
+    document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "block";
+    document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
 }
 
 // Print colored "msg" to LOG text box
-function appendLogs(msg, color) {
+function appendLogs(msg, color, ObjectIOT) {
     console.table('appendLogs', msg);
 
     if ($('.log-div').length) {
         $('.log-div').append(`<div class='log-text-content' style="color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
-          $(".log-div").scrollTop($(".log-div")[1].scrollHeight);
+          // Get selected greenhouse
+          let greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
+          $(".log-div").scrollTop($(".log-div")[greenhouseNumber].scrollHeight);
         } catch {}
-        // IF USER MODE
-        // if (document.getElementsByClassName('admin').length == 0) {
-        //     switch (color) {
-        //         case colorERROR:
-        //             document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: red');
-        //             break;
-        //         case colorSUCCESS:
-        //             document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: green');
-        //             break;
-        //         case colorINFO:
-        //             document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.setAttribute('style', 'color: blue');
-        //             break;
-        //         default:
-        //             // leave font color as BLACK
-        //             break;
-        //     }
-        //     // scroll into view
-        //     document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.log-container > div").lastChild.scrollIntoViewIfNeeded();
-        // }
-        // ELSE ADMIN MODE (document.getElementsByClassName('admin').length == 2)
-        // else {
-        //     switch (color) {
-        //         case colorERROR:
-        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: red');
-        //             break;
-        //         case colorSUCCESS:
-        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: green');
-        //             break;
-        //         case colorINFO:
-        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.setAttribute('style', 'color: blue');
-        //             break;
-        //         default:
-        //             // leave font color as BLACK
-        //             break;
-        //     }
-        //     // scroll into view
-        //     document.querySelector("#outcome-view-home > div.outcomes-div > div.log-container > div").lastChild.scrollIntoViewIfNeeded();
-        // }
     }
 }
 
@@ -405,55 +374,17 @@ function appendStatus(msg, color) {
     if ($('.status-div').length) {
         $('.status-div').append(`<div class='status-text-content' style="color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
-          $(".status-div").scrollTop($(".status-div")[1].scrollHeight);
+          let greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
+          $(".status-div").scrollTop($(".status-div")[greenhouseNumber].scrollHeight);
         } catch {}
-        // IF USER MODE
-        // if (document.getElementsByClassName('admin').length == 0) {
-        //   document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', `color: ${colorToHTML[color]}`);
-
-          // switch (color) {
-          //       case colorERROR:
-          //           document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: red');
-          //           break;
-          //       case colorSUCCESS:
-          //           document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: green');
-          //           break;
-          //       case colorINFO:
-          //           document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.setAttribute('style', 'color: blue');
-          //           break;
-          //       default:
-          //           // leave font color as BLACK
-          //           break;
-          //   }
-            // scroll into view
-            // document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view > div > div.status-container > div").lastChild.scrollIntoViewIfNeeded();
-        // }
-        // ELSE ADMIN MODE (document.getElementsByClassName('admin').length == 2)
-        // else {
-        //     switch (color) {
-        //         case colorERROR:
-        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: red');
-        //             break;
-        //         case colorSUCCESS:
-        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: green');
-        //             break;
-        //         case colorINFO:
-        //             document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.setAttribute('style', 'color: blue');
-        //             break;
-        //         default:
-        //             // leave font color as BLACK
-        //             break;
-        //     }
-        //     // scroll into view
-        //     document.querySelector("#outcome-view-home > div.outcomes-div > div.status-container > div").lastChild.scrollIntoViewIfNeeded();
-        // }
     }
 }
 
 // Display LCD DATA from IOT to WebApp Virtual LCD Display
 function renderDataOnScreen(msg) {
     try {
-        $(".panel-text-r1").html(msg.data1);
+      let fontSizeVal = "6px";
+        $(".panel-text-r1").html(msg.data1).fontSize(fontSizeVal);
         $(".panel-text-r2").html(msg.data2);
         $(".panel-text-r3").html(msg.data3);
         $(".panel-text-r4").html(msg.data4);
