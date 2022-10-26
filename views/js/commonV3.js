@@ -110,30 +110,26 @@ $(document).ready(() => {
       objectToIOT.office_name = officeName;
       objectToIOT.targetType = OFFICE_MODULE_TYPE;
       objectToIOT.greenhouse_name = '';
-      objectToIOT.bay_name = 'Bay 1'; // It's default selected
+      objectToIOT.bay_name =  '';
       appendStatus(objectToIOT, colorINFO);
     });
   
     // GREENHOUSE GEAR selected (ADMIN mode)
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
       // set objectToIOT variables
-      // objectForSocket.office_name = document.querySelector('h3.office-title').innerHTML;
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.parentElement.querySelector("h2").innerHTML;
       objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
-      // objectToIOT.bay_name = 'Bay 1'; // It's default selected
-      objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
+      objectToIOT.bay_name =  '';
       appendStatus(objectToIOT, colorINFO);
     });
 
     // GREENHOUSE selected (USER mode)
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .main-greenhouse-div', (element) => {
       // set objectToIOT variables
-      // objectToIOT.office_name = document.querySelector('h3.office-title').innerHTML;
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
-      objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
-      // objectToIOT.bay_name = 'Bay 1'; // It's default selected
+      objectToIOT.targetType = BAYWATER_MODULE_TYPE;
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
 
       // set Selected GH Name in LOCATION
@@ -149,6 +145,7 @@ $(document).ready(() => {
     $('.bay-div').on('click', (element) => {
       // set objectToIOT variables
       objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
+      objectToIOT.targetType = BAYWATER_MODULE_TYPE;
       // set Selected BAY Name in LOCATION
       document.querySelector("#bay-outcome-num").innerHTML = element.currentTarget.children[0].innerHTML;
       appendStatus(objectToIOT, colorINFO);
@@ -162,22 +159,24 @@ $(document).ready(() => {
       }
     });
 
-    // LOCATION CONTAINER BAY WATER icon selected - toggle to MAP icon
-    $('.location-container').on('click', 'bay-icon-container-water', (element) => {
-      // add MAP icon to BAY LOCATION
-      addMapIcon(objectToIOT);
-    });
+    // // LOCATION CONTAINER BAY WATER icon selected - toggle to MAP icon
+    // $('.location-container').on('click', 'bay-icon-container-water', (element) => {
+    //   // add MAP icon to BAY LOCATION
+    //   addMapIcon(objectToIOT);
+    // });
 
-    // LOCATION CONTAINER BAY MAP icon selected - toggle to WATER icon
-    $('.location-container').on('click', 'bay-icon-container-map', (element) => {
-      // add WATER icon to BAY LOCATION
-      addWaterIcon(objectToIOT);
-    });
+    // // LOCATION CONTAINER BAY MAP icon selected - toggle to WATER icon
+    // $('.location-container').on('click', 'bay-icon-container-map', (element) => {
+    //   // add WATER icon to BAY LOCATION
+    //   addWaterIcon(objectToIOT);
+    // });
  
     // Reset/Hide elements when selecting ADMIN->USER mode
     $('.toggle-handle').on('click', '.toggle-div .admin' , (element) => {
-      // LOG and STATUS text boxes already hidden when selecting ADMIN->USER
-      // document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-view").style.display='none';
+      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+    
+      // Show LOG and STATUS text boxes when selecting ADMIN->USER
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
 
       // Change ACTION string to '' if ACTION is NOT WATER or MAPPING
       if (($(".action-outcome").html() !== 'Water') && ($(".action-outcome").html() !== 'Mapping')) {
@@ -189,29 +188,29 @@ $(document).ready(() => {
       // Hide WiFi_STATUS action box
       document.querySelector("#greenhouse-3-view > div.main-action-div > div.wifi-container").style.display='none';
       // Hide WiFi_STATUS menu icon and text
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-wifi > div.operation-icon.wifi").className='operation-icon mpu-config';
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-wifi > div.home-operation-text").style.color='white';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi > div.operation-icon.wifi").className='operation-icon mpu-config';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi > div.home-operation-text").style.color='white';
       
       // ===== WiFI_CONFIG
       // Hide WiFI_CONFIG action box
       document.querySelector("#greenhouse-3-view > div.main-action-div > div.wifi-config-container").style.display='none';
       // Hide WiFI_CONFIG menu icon and text
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.operation-icon.wifi-config").className='operation-icon mpu-config';
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.home-operation-text").style.color='white';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.operation-icon.wifi-config").className='operation-icon mpu-config';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.home-operation-text").style.color='white';
       
       // ===== MPU_STATUS
       // Hide MPU_STATUS action box
-      document.querySelector("#greenhouse-3-view > div.main-action-div > div.mpu-status-container").style.display='none';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.main-action-div > div.mpu-status-container").style.display='none';
       // Hide MPU_STATUS menu icon and text
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-mpu > div.operation-icon.mpu").className='operation-icon mpu-config';
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-mpu > div.home-operation-text").style.color='white';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu > div.operation-icon.mpu").className='operation-icon mpu-config';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu > div.home-operation-text").style.color='white';
 
       // ===== MPU_CONFIG
       // Hide MPU_CONFIG action box
-      document.querySelector("#greenhouse-3-view > div.main-action-div > div.mpu-config-container").style.display='none';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.main-action-div > div.mpu-config-container").style.display='none';
       // Hide MPU_CONFIG menu icon and text
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-mpu-config > div.operation-icon.mpu-config").className='operation-icon mpu-config';
-      document.querySelector("#greenhouse-1-view > div.menu-container > div.admin-menu > div > div.admin-mpu-config > div.home-operation-text").style.color='white';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu-config > div.operation-icon.mpu-config").className='operation-icon mpu-config';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu-config > div.home-operation-text").style.color='white';
     });
 
     // KEYPAD BUTTON selected
