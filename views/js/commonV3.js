@@ -427,13 +427,13 @@ function processIOTResponse(dataFromIOT) {
             // appendStatus(`=======CMD_RET_MAP_DATA=======`);
             appendStatus(`CMD_RET_MAP_DATA Command Not Implemented`, colorERROR);
             break;
-        case CMD_RET_WIFI_STATUS:
-            // appendStatus(`=====CMD_RET_WIFI_STATUS======`);
-            appendStatus(`CMD_RET_WIFI_STATUS Command Not Implemented`, colorERROR);
+        case CMD_RET_LORA_STATUS:
+            // appendStatus(`=====CMD_RET_LORA_STATUS======`);
+            appendStatus(`CMD_RET_LORA_STATUS Command Not Implemented`, colorERROR);
             break;
-        case CMD_RET_WIFI_CONFIG:
-            // appendStatus(`=====CMD_RET_WIFI_CONFIG======`);
-            appendStatus(`CMD_RET_WIFI_CONFIG Command  Implemented`, colorERROR);
+        case CMD_RET_LORA_CONFIG:
+            // appendStatus(`=====CMD_RET_LORA_CONFIG======`);
+            appendStatus(`CMD_RET_LORA_CONFIG Command  Implemented`, colorERROR);
             break;
         case CMD_RET_MPU_STATUS:
             // appendStatus(`=====CMD_RET_MPU_STATUS=======`);
