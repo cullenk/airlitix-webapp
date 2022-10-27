@@ -49,10 +49,10 @@ let objectToIOT = {
   office_name: '',     // OFFICE_NAME
   greenhouse_name: '', // greenhouse_NAME
   bay_name: '',        // BAY_NAME
-  targetType: '',      // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
+  destModuleType: '',  // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
   command: '',         // COMMAND
-  data1: '',            // DATA1: KEYPAD or Command input1
-  data2: ''             // DATA2: KEYPAD or Command input2
+  data1: '',           // DATA1: KEYPAD or Command input1
+  data2: ''            // DATA2: KEYPAD or Command input2
 };
 
 // structure from IOT
@@ -109,7 +109,7 @@ $(document).ready(() => {
       // set objectToIOT variables
       // objectToIOT.office_name = document.querySelector('h3.office-title').innerHTML;
       objectToIOT.office_name = officeName;
-      objectToIOT.targetType = OFFICE_MODULE_TYPE;
+      objectToIOT.destModuleType = OFFICE_MODULE_TYPE;
       objectToIOT.greenhouse_name = '';
       objectToIOT.bay_name =  '';
       appendStatus(objectToIOT, colorINFO);
@@ -120,7 +120,7 @@ $(document).ready(() => {
       // set objectToIOT variables
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.parentElement.querySelector("h2").innerHTML;
-      objectToIOT.targetType = GREENHOUSE_MODULE_TYPE;
+      objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
       objectToIOT.bay_name =  '';
       appendStatus(objectToIOT, colorINFO);
     });
@@ -131,7 +131,7 @@ $(document).ready(() => {
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-      objectToIOT.targetType = BAYWATER_MODULE_TYPE;
+      objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
@@ -151,7 +151,7 @@ $(document).ready(() => {
       objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
       let bayType = "W";
-      if (objectToIOT.targetType == BAYMAP_MODULE_TYPE) {
+      if (objectToIOT.destModuleType == BAYMAP_MODULE_TYPE) {
         bayType = "M";
       }
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
@@ -332,7 +332,7 @@ function addWaterIcon(objectToIOT) {
         waterIconFLAG = true;
     }
     // Set TARGETTYPE to BAYWATER
-    objectToIOT.targetType = BAYWATER_MODULE_TYPE;
+    objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
     document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "none";
     document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "block";
     document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
@@ -357,7 +357,7 @@ function addMapIcon(objectToIOT) {
         mapIconFLAG = true;
     }
     // Set TARGETTYPE to BAYMAP
-    objectToIOT.targetType = BAYMAP_MODULE_TYPE;
+    objectToIOT.destModuleType = BAYMAP_MODULE_TYPE;
     document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "none";
     document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "block";
     document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
