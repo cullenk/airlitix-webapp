@@ -83,7 +83,7 @@ $(document).ready(() => {
         wifiClient = data.socketId;
         appendLogs(`WIFI Client ${data.socketId} connected.`, colorSUCCESS);
       } else {
-        appendLogs(`Not WIFI Client available yet.`, colorERROR);
+        appendLogs(`No WIFI Client available yet.`, colorERROR);
       }
     });
     socket.on('WIFI-CLIENT-DISCONNECTED', (data) => {
@@ -92,7 +92,7 @@ $(document).ready(() => {
     });
 
     socket.on('message', (data) => {
-      appendLogs(`Message received from WIFI Client ${JSON.stringify(data.msg, null, 2)}.`, colorINFO);
+      appendLogs(`Data received from WIFI Client ${JSON.stringify(data.msg, null, 2)}.`, colorINFO);
     });
 
     socket.on('fromiot', (responseFromIOT) => {
