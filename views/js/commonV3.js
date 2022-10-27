@@ -57,10 +57,10 @@ let objectToIOT = {
 // structure from IOT
 let objectFromIOT = {
   command: '', // COMMAND
-  data1: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE1
-  data2: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE2
-  data3: '',   // LCD, MAP, MPU, WiFi, LOG return data LINE3
-  data4: ''    // LCD, MAP, MPU, WiFi, LOG return data LINE4
+  data1: '',   // LCD, MAP, MCU, WiFi, LOG return data LINE1
+  data2: '',   // LCD, MAP, MCU, WiFi, LOG return data LINE2
+  data3: '',   // LCD, MAP, MCU, WiFi, LOG return data LINE3
+  data4: ''    // LCD, MAP, MCU, WiFi, LOG return data LINE4
 };
 
 $(document).ready(() => {
@@ -207,17 +207,17 @@ $(document).ready(() => {
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.operation-icon.wifi-config").className='operation-icon mpu-config';
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.home-operation-text").style.color='white';
       
-      // ===== MPU_STATUS
-      // Hide MPU_STATUS action box
+      // ===== MCU_STATUS
+      // Hide MCU_STATUS action box
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.main-action-div > div.mpu-status-container").style.display='none';
-      // Hide MPU_STATUS menu icon and text
+      // Hide MCU_STATUS menu icon and text
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu > div.operation-icon.mpu").className='operation-icon mpu-config';
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu > div.home-operation-text").style.color='white';
 
-      // ===== MPU_CONFIG
-      // Hide MPU_CONFIG action box
+      // ===== MCU_CONFIG
+      // Hide MCU_CONFIG action box
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.main-action-div > div.mpu-config-container").style.display='none';
-      // Hide MPU_CONFIG menu icon and text
+      // Hide MCU_CONFIG menu icon and text
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu-config > div.operation-icon.mpu-config").className='operation-icon mpu-config';
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-mpu-config > div.home-operation-text").style.color='white';
     });
@@ -286,11 +286,11 @@ $(document).ready(() => {
       });
     });
 
-    // MPU-STATUS menu button selected
+    // MCU-STATUS menu button selected
     $('.mpu').on('click', (element) => {
-      objectToIOT.command = CMD_GET_MPU_STATUS;
+      objectToIOT.command = CMD_GET_MCU_STATUS;
       appendStatus(objectToIOT, colorINFO);
-      // Send MPU STATUS request to IOT
+      // Send MCU STATUS request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -298,11 +298,11 @@ $(document).ready(() => {
       });
     });
 
-    // MPU-CONFIG menu button selected
+    // MCU-CONFIG menu button selected
     $('.mpu-config').on('click', (element) => {
-      objectToIOT.command = CMD_GET_MPU_CONFIG;
+      objectToIOT.command = CMD_GET_MCU_CONFIG;
       appendStatus(objectToIOT, colorINFO);
-      // Send MPU CONFIG request to IOT
+      // Send MCU CONFIG request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -435,13 +435,13 @@ function processIOTResponse(dataFromIOT) {
             // appendStatus(`=====CMD_RET_LORA_CONFIG======`);
             appendStatus(`CMD_RET_LORA_CONFIG Command  Implemented`, colorERROR);
             break;
-        case CMD_RET_MPU_STATUS:
-            // appendStatus(`=====CMD_RET_MPU_STATUS=======`);
-            appendStatus(`CMD_RET_MPU_STATUS Command Not Implemented`, colorERROR);
+        case CMD_RET_MCU_STATUS:
+            // appendStatus(`=====CMD_RET_MCU_STATUS=======`);
+            appendStatus(`CMD_RET_MCU_STATUS Command Not Implemented`, colorERROR);
             break;
-        case CMD_RET_MPU_CONFIG:
-            // appendStatus(`=====CMD_RET_MPU_CONFIG=======`);
-            appendStatus(`CMD_RET_MPU_CONFIG Command Not Implemented`, colorERROR);
+        case CMD_RET_MCU_CONFIG:
+            // appendStatus(`=====CMD_RET_MCU_CONFIG=======`);
+            appendStatus(`CMD_RET_MCU_CONFIG Command Not Implemented`, colorERROR);
             break;
         case CMD_RET_STATUS:
             // appendStatus(`========CMD_RET_STATUS=========`);
