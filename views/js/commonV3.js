@@ -96,7 +96,7 @@ $(document).ready(() => {
     });
 
     socket.on('fromiot', (responseFromIOT) => {
-      processTheIOTResponse(responseFromIOT);
+      processIOTResponse(responseFromIOT);
     });
 
     socket.emit('join', {
@@ -129,9 +129,11 @@ $(document).ready(() => {
       // set objectToIOT variables
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
+      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.targetType = BAYWATER_MODULE_TYPE;
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
-
+      let bayNumber = +objectToIOT.bay_name.split(" ")[1];
+      objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
       // set Selected GH Name in LOCATION
       document.querySelector("#gh-outcome-num").innerHTML = document.querySelector("#greenhouse-1-view > div.bay-info-div > div.bay-heading-div > h1").innerHTML;
       // set Selected BAY Name in LOCATION
@@ -144,8 +146,15 @@ $(document).ready(() => {
     // BAY selected
     $('.bay-div').on('click', (element) => {
       // set objectToIOT variables
+      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
-      objectToIOT.targetType = BAYWATER_MODULE_TYPE;
+      let bayNumber = +objectToIOT.bay_name.split(" ")[1];
+      let bayType = "W";
+      if (objectToIOT.targetType == BAYMAP_MODULE_TYPE) {
+        bayType = "M";
+      }
+      objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
+
       // set Selected BAY Name in LOCATION
       document.querySelector("#bay-outcome-num").innerHTML = element.currentTarget.children[0].innerHTML;
       appendStatus(objectToIOT, colorINFO);
@@ -380,33 +389,32 @@ function appendStatus(msg, color) {
 }
 
 // Display LCD DATA from IOT to WebApp Virtual LCD Display
-function renderDataOnScreen(msg) {
+function renderLCDData(msg) {
     try {
-      let fontSizeVal = "6px";
-        $(".panel-text-r1").html(msg.data1).fontSize(fontSizeVal);
+        $(".panel-text-r1").html(msg.data1);
         $(".panel-text-r2").html(msg.data2);
         $(".panel-text-r3").html(msg.data3);
         $(".panel-text-r4").html(msg.data4);
     } catch (e) {
-        console.error('renderDataOnScreen.error', e); // needed ??
+        console.error('renderLCDData.error', e); // needed ??
         appendStatus(`Render LCD Data to Display ERROR`, colorERROR);
     }
 }
 
 // Parse IOT return COMMAND for action
-function processTheIOTResponse(dataFromIOT) {
+function processIOTResponse(dataFromIOT) {
     objectFromIOT = dataFromIOT;
 
     // Check if there is a msg
     if (!objectFromIOT.msg) {
-        appendStatus(`No MESSAGE DATA received from WIFI Client ${JSON.stringify(objectFromIOT, null, 2)}.`, colorERROR);
+        appendStatus(`No DATA received from WIFI Client ${JSON.stringify(objectFromIOT, null, 2)}.`, colorERROR);
         return;
     }
     // 
     switch (objectFromIOT.msg.command) {
         case CMD_RET_LCD_DATA:
             appendStatus(`=======CMD_RET_LCD_DATA=======`, colorSUCCESS);
-            renderDataOnScreen(objectFromIOT.msg);
+            renderLCDData(objectFromIOT.msg);
             break;
         case CMD_RET_LOG:
             appendLogs(`==========CMD_RET_LOG=========`, colorSUCCESS);
