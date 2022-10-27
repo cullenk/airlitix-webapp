@@ -51,16 +51,17 @@ let objectToIOT = {
   bay_name: '',        // BAY_NAME
   targetType: '',      // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
   command: '',         // COMMAND
-  data: ''             // DATA: KEYPAD input
+  data1: '',            // DATA1: KEYPAD or Command input1
+  data2: ''             // DATA2: KEYPAD or Command input2
 };
 
 // structure from IOT
 let objectFromIOT = {
   command: '', // COMMAND
-  data1: '',   // LCD, MAP, MCU, WiFi, LOG return data LINE1
-  data2: '',   // LCD, MAP, MCU, WiFi, LOG return data LINE2
-  data3: '',   // LCD, MAP, MCU, WiFi, LOG return data LINE3
-  data4: ''    // LCD, MAP, MCU, WiFi, LOG return data LINE4
+  text1: '',   // LCD, MAP, MCU, WiFi, LOG return text LINE1
+  text2: '',   // LCD, MAP, MCU, WiFi, LOG return text LINE2
+  text3: '',   // LCD, MAP, MCU, WiFi, LOG return text LINE3
+  text4: ''    // LCD, MAP, MCU, WiFi, LOG return text LINE4
 };
 
 $(document).ready(() => {
@@ -225,7 +226,8 @@ $(document).ready(() => {
     // KEYPAD BUTTON selected
     $('.keypad-btn').on('click', (element) => {
       // set objectToIOT variables
-      objectToIOT.data = element.currentTarget.children[0].innerHTML;
+      objectToIOT.data1 = element.currentTarget.children[0].innerHTML;
+      objectToIOT.data2 = '0';
       objectToIOT.command = CMD_SET_LCD_DATA;
       appendStatus(objectToIOT, colorINFO);
       // Send KEYPAD entry to IOT
@@ -391,10 +393,10 @@ function appendStatus(msg, color) {
 // Display LCD DATA from IOT to WebApp Virtual LCD Display
 function renderLCDData(msg) {
     try {
-        $(".panel-text-r1").html(msg.data1);
-        $(".panel-text-r2").html(msg.data2);
-        $(".panel-text-r3").html(msg.data3);
-        $(".panel-text-r4").html(msg.data4);
+        $(".panel-text-r1").html(msg.text1);
+        $(".panel-text-r2").html(msg.text2);
+        $(".panel-text-r3").html(msg.text3);
+        $(".panel-text-r4").html(msg.text4);
     } catch (e) {
         console.error('renderLCDData.error', e); // needed ??
         appendStatus(`Render LCD Data to Display ERROR`, colorERROR);
@@ -418,10 +420,10 @@ function processIOTResponse(dataFromIOT) {
             break;
         case CMD_RET_LOG:
             appendLogs(`==========CMD_RET_LOG=========`, colorSUCCESS);
-            appendLogs(`${objectFromIOT.msg.data1}`, colorSUCCESS);
-            appendLogs(`${objectFromIOT.msg.data2}`, colorSUCCESS);
-            appendLogs(`${objectFromIOT.msg.data3}`, colorSUCCESS);
-            appendLogs(`${objectFromIOT.msg.data4}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text1}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text2}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text3}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text4}`, colorSUCCESS);
             break;
         case CMD_RET_MAP_DATA:
             // appendStatus(`=======CMD_RET_MAP_DATA=======`);
