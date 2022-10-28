@@ -57,11 +57,13 @@ let objectToIOT = {
 
 // structure from IOT
 let objectFromIOT = {
-  command: '', // COMMAND
-  text1: '',   // LCD, MAP, MCU, WiFi, LOG return text LINE1
-  text2: '',   // LCD, MAP, MCU, WiFi, LOG return text LINE2
-  text3: '',   // LCD, MAP, MCU, WiFi, LOG return text LINE3
-  text4: ''    // LCD, MAP, MCU, WiFi, LOG return text LINE4
+  command: '',        // COMMAND
+  destModuleName: '', // Destination Module Name
+  destModuleType: '', // Destination Module Type
+  text1: '',          // LCD, MAP, MCU, WiFi, LOG return text LINE1
+  text2: '',          // LCD, MAP, MCU, WiFi, LOG return text LINE2
+  text3: '',          // LCD, MAP, MCU, WiFi, LOG return text LINE3
+  text4: ''           // LCD, MAP, MCU, WiFi, LOG return text LINE4
 };
 
 $(document).ready(() => {
@@ -120,6 +122,8 @@ $(document).ready(() => {
       // set objectToIOT variables
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.parentElement.querySelector("h2").innerHTML;
+      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
       objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
       objectToIOT.bay_name =  '';
       appendStatus(objectToIOT, colorINFO);
@@ -131,6 +135,7 @@ $(document).ready(() => {
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
       objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
