@@ -420,7 +420,11 @@ function processIOTResponse(dataFromIOT) {
     // 
     switch (objectFromIOT.msg.command) {
         case CMD_RET_LCD_DATA:
-            appendStatus(`=======CMD_RET_LCD_DATA=======`, colorSUCCESS);
+            appendLogs(`=======CMD_RET_LCD_DATA=======`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text1}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text2}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text3}`, colorSUCCESS);
+            appendLogs(`${objectFromIOT.msg.text4}`, colorSUCCESS);
             renderLCDData(objectFromIOT.msg);
             break;
         case CMD_RET_LOG:
