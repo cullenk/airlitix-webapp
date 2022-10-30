@@ -455,6 +455,6 @@ function processIOTResponse(dataFromIOT) {
             appendStatus(`CMD_RET_STATUS Command Not Implemented`, colorERROR);
             break;
         default:
-            appendStatus(`${objectFromIOT.msg.command} Command Not Implemented`, colorERROR);
+            appendStatus(`Unknown Command: ${objectFromIOT.msg.command}`, colorERROR);
     }
 }
