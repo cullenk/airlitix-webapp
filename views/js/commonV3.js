@@ -50,9 +50,9 @@ let objectToIOT = {
   greenhouse_name: '', // greenhouse_NAME
   bay_name: '',        // BAY_NAME
   destModuleType: '',  // MODULE_TYPE: 1=OFF, 2=GH, 3=BAYWater, 4=BAYMap
-  command: '',         // COMMAND
-  data1: '',           // DATA1: KEYPAD or Command input1
-  data2: ''            // DATA2: KEYPAD or Command input2
+  command: '',         // IOT COMMAND
+  data1: '',           // DATA1: Command input
+  data2: ''            // DATA2: Command option input
 };
 
 // structure from IOT
@@ -141,7 +141,8 @@ $(document).ready(() => {
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
       // set Selected GH Name in LOCATION
-      document.querySelector("#gh-outcome-num").innerHTML = document.querySelector("#greenhouse-1-view > div.bay-info-div > div.bay-heading-div > h1").innerHTML;
+      // document.querySelector("#gh-outcome-num").innerHTML = document.querySelector("#greenhouse-1-view > div.bay-info-div > div.bay-heading-div > h1").innerHTML;
+      document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
       // set Selected BAY Name in LOCATION
       document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
       // add default WATER icon to BAY LOCATION
@@ -231,9 +232,10 @@ $(document).ready(() => {
     // KEYPAD BUTTON selected
     $('.keypad-btn').on('click', (element) => {
       // set objectToIOT variables
-      objectToIOT.data1 = element.currentTarget.children[0].innerHTML;
-      objectToIOT.data2 = '0';
       objectToIOT.command = CMD_SET_LCD_DATA;
+      objectToIOT.data1 = atoi(element.currentTarget.children[0].innerHTML);
+      objectToIOT.data2 = 0;
+
       appendStatus(objectToIOT, colorINFO);
       // Send KEYPAD entry to IOT
       socket.emit('toiot', {
@@ -397,15 +399,16 @@ function appendStatus(msg, color) {
 
 // Display LCD DATA from IOT to WebApp Virtual LCD Display
 function renderLCDData(msg) {
-    try {
-        $(".panel-text-r1").html(msg.text1);
-        $(".panel-text-r2").html(msg.text2);
-        $(".panel-text-r3").html(msg.text3);
-        $(".panel-text-r4").html(msg.text4);
-    } catch (e) {
-        console.error('renderLCDData.error', e); // needed ??
-        appendStatus(`Render LCD Data to Display ERROR`, colorERROR);
-    }
+  console.table('renderLCDData', msg);
+  try {
+      $(".panel-text-r1").html(msg.text1);
+      $(".panel-text-r2").html(msg.text2);
+      $(".panel-text-r3").html(msg.text3);
+      $(".panel-text-r4").html(msg.text4);
+  } catch (e) {
+      console.error('renderLCDData.error', e); // needed ??
+      appendStatus(`Render LCD Data to Display ERROR`, colorERROR);
+  }
 }
 
 // Parse IOT return COMMAND for action
