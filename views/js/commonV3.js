@@ -81,6 +81,11 @@ $(document).ready(() => {
 
     let officeName = $(".office-div > h3").html();
 
+    document.getElementsByClassName('panel-text-r1').style.fontSize="38px";
+    document.getElementsByClassName('panel-text-r2').style.fontSize="38px";
+    document.getElementsByClassName('panel-text-r3').style.fontSize="38px";
+    document.getElementsByClassName('panel-text-r4').style.fontSize="38px";
+
     socket.on('WIFI-CLIENT-CONNECTED', (data) => {
       if (data.socketId) {
         wifiClient = data.socketId;
@@ -233,7 +238,7 @@ $(document).ready(() => {
     $('.keypad-btn').on('click', (element) => {
       // set objectToIOT variables
       objectToIOT.command = CMD_SET_LCD_DATA;
-      objectToIOT.data1 = atoi(element.currentTarget.children[0].innerHTML);
+      objectToIOT.data1 = int(element.currentTarget.children[0].innerHTML);
       objectToIOT.data2 = 0;
 
       appendStatus(objectToIOT, colorINFO);
@@ -250,6 +255,8 @@ $(document).ready(() => {
       objectToIOT.command = CMD_GET_LCD_DATA;
       appendStatus(objectToIOT, colorINFO);
       addWaterIcon(objectToIOT);
+      // SET ACTION TO 'Water'
+      document.querySelector("#action-outcome").innerHTML='Water';
       // Send LCD DATA request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
@@ -263,6 +270,8 @@ $(document).ready(() => {
       objectToIOT.command = CMD_GET_MAP_DATA;
       appendStatus(objectToIOT, colorINFO);
       addMapIcon(objectToIOT);
+      // SET ACTION TO 'Mapping'
+      document.querySelector("#action-outcome").innerHTML='Mapping';
       // Send MAP DATA request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
@@ -275,6 +284,8 @@ $(document).ready(() => {
     $('.wifi').on('click', (element) => {
       objectToIOT.command = CMD_GET_WIFI_STATUS;
       appendStatus(objectToIOT, colorINFO);
+      // SET ACTION TO 'WiFi Status'
+      document.querySelector("#action-outcome").innerHTML='WiFi Status';
       // Send WiFi STATUS request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
@@ -287,6 +298,8 @@ $(document).ready(() => {
     $('.wifi-config').on('click', (element) => {
       objectToIOT.command = CMD_GET_WIFI_CONFIG;
       appendStatus(objectToIOT, colorINFO);
+      // SET ACTION TO 'WiFi Config'
+      document.querySelector("#action-outcome").innerHTML='WiFi Config';
       // Send WiFi CONFIG request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
@@ -299,6 +312,8 @@ $(document).ready(() => {
     $('.mpu').on('click', (element) => {
       objectToIOT.command = CMD_GET_MCU_STATUS;
       appendStatus(objectToIOT, colorINFO);
+      // SET ACTION TO 'MCU Status'
+      document.querySelector("#action-outcome").innerHTML='MCU Status';
       // Send MCU STATUS request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
@@ -311,6 +326,8 @@ $(document).ready(() => {
     $('.mpu-config').on('click', (element) => {
       objectToIOT.command = CMD_GET_MCU_CONFIG;
       appendStatus(objectToIOT, colorINFO);
+      // SET ACTION TO 'MCU Config'
+      document.querySelector("#action-outcome").innerHTML='MCU Config';
       // Send MCU CONFIG request to IOT
       socket.emit('toiot', {
         receiverId: wifiClient,
