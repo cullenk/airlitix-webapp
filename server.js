@@ -32,8 +32,8 @@ let params = {
   cors: {
     origin: '*' // it should be restricted
   },
-  pingInterval: 4000,
-  pingTimeout: 8000
+  // pingInterval: 4000,
+  // pingTimeout: 8000
 };
 
 const io = require('socket.io')(server, params);
