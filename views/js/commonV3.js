@@ -233,7 +233,7 @@ $(document).ready(() => {
     $('.keypad-btn').on('click', (element) => {
       // set objectToIOT variables
       objectToIOT.command = CMD_SET_LCD_DATA;
-      objectToIOT.data1 = element.currentTarget.children[0].innerHTML;
+      objectToIOT.data1 = parseInt(element.currentTarget.children[0].innerHTML);
       objectToIOT.data2 = 0;
 
       appendStatus(objectToIOT, colorINFO);
