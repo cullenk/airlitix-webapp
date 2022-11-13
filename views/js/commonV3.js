@@ -81,10 +81,18 @@ $(document).ready(() => {
 
     let officeName = $(".office-div > h3").html();
 
-    document.getElementsByClassName('panel-text-r1').style.fontSize="38px";
-    document.getElementsByClassName('panel-text-r2').style.fontSize="38px";
-    document.getElementsByClassName('panel-text-r3').style.fontSize="38px";
-    document.getElementsByClassName('panel-text-r4').style.fontSize="38px";
+    // document.getElementsByClassName('panel-text-r1').style.fontSize="38px";
+    // document.getElementsByClassName('panel-text-r2').style.fontSize="38px";
+    // document.getElementsByClassName('panel-text-r3').style.fontSize="38px";
+    // document.getElementsByClassName('panel-text-r4').style.fontSize="38px";
+    let thing = document.getElementsByClassName('panel-text-r1');
+    thing.firstElementChild.style.fontSize = '38px';
+     thing = document.getElementsByClassName('panel-text-r2');
+    thing.firstElementChild.style.fontSize = '38px';
+     thing = document.getElementsByClassName('panel-text-r3');
+    thing.firstElementChild.style.fontSize = '38px';
+     thing = document.getElementsByClassName('panel-text-r4');
+    thing.firstElementChild.style.fontSize = '38px';
 
     socket.on('WIFI-CLIENT-CONNECTED', (data) => {
       if (data.socketId) {
