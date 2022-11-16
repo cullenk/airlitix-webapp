@@ -114,7 +114,7 @@ $(document).ready(() => {
       objectToIOT.destModuleType = OFFICE_MODULE_TYPE;
       objectToIOT.greenhouse_name = '';
       objectToIOT.bay_name =  '';
-      appendStatus(objectToIOT, colorINFO);
+      // appendStatus(objectToIOT, colorINFO);
     });
   
     // GREENHOUSE GEAR selected (ADMIN mode)
@@ -126,7 +126,7 @@ $(document).ready(() => {
       objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
       objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
       objectToIOT.bay_name =  '';
-      appendStatus(objectToIOT, colorINFO);
+      // appendStatus(objectToIOT, colorINFO);
     });
 
     // GREENHOUSE selected (USER mode)
@@ -147,7 +147,7 @@ $(document).ready(() => {
       document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
       // add default WATER icon to BAY LOCATION
       addWaterIcon(objectToIOT);
-      appendStatus(objectToIOT, colorINFO);
+      // appendStatus(objectToIOT, colorINFO);
     });
 
     // BAY selected
@@ -164,15 +164,15 @@ $(document).ready(() => {
 
       // set Selected BAY Name in LOCATION
       document.querySelector("#bay-outcome-num").innerHTML = element.currentTarget.children[0].innerHTML;
-      appendStatus(objectToIOT, colorINFO);
+      // appendStatus(objectToIOT, colorINFO);
 
-      if ($(".action-outcome").html() !== ' ') {
-        socket.emit('toiot', {
-          receiverId: wifiClient,
-          senderId: socket.id,
-          msg: objectToIOT
-        });
-      }
+      // if ($(".action-outcome").html() !== ' ') {
+      //   socket.emit('toiot', {
+      //     receiverId: wifiClient,
+      //     senderId: socket.id,
+      //     msg: objectToIOT
+      //   });
+      // }
     });
 
     // // LOCATION CONTAINER BAY WATER icon selected - toggle to MAP icon
