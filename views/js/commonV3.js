@@ -391,7 +391,7 @@ function appendLogs(msg, color, ObjectIOT) {
     console.table('appendLogs', msg);
 
     if ($('.log-div').length) {
-        $('.log-div').append(`<div class='log-text-content' style="color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
+        $('.log-div').append(`<div class='log-text-content' style="font-size: 0.8vw; color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
           // Get selected greenhouse
           let greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
@@ -405,7 +405,7 @@ function appendStatus(msg, color) {
     console.table('appendStatus', msg);
 
     if ($('.status-div').length) {
-        $('.status-div').append(`<div class='status-text-content' style="color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
+        $('.status-div').append(`<div class='status-text-content' style="font-size: 0.8vw; color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
           let greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
           $(".status-div").scrollTop($(".status-div")[greenhouseNumber].scrollHeight);
