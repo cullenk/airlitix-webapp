@@ -19,8 +19,8 @@
     padding-left: 5px;
   }
   .panel-screen {
-    height: 10vw;
+    height: 9vw;
   }
-  .panel-panel-container {
-    height: 110%;
+  .water-panel-container {
+    width: 110%;
   }
