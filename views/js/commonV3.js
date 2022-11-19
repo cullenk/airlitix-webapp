@@ -121,7 +121,7 @@ $(document).ready(() => {
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
       // set objectToIOT variables
       objectToIOT.office_name = officeName;
-      objectToIOT.greenhouse_name = element.parentElement.querySelector("h2").innerHTML;
+      objectToIOT.greenhouse_name = element.parentElement.querySelector('h2.greenhouse-heading').innerHTML;
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
       objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
@@ -277,7 +277,7 @@ $(document).ready(() => {
 
     // WIFI-STATUS menu button selected
     $('.wifi').on('click', (element) => {
-      objectToIOT.command = CMD_GET_WIFI_STATUS;
+      objectToIOT.command = CMD_GET_LORA_STATUS;
       appendStatus(objectToIOT, colorINFO);
       // SET ACTION TO 'WiFi Status'
       document.querySelector("#action-outcome").innerHTML='WiFi Status';
@@ -291,7 +291,7 @@ $(document).ready(() => {
 
     // WIFI-CONFIG menu button selected
     $('.wifi-config').on('click', (element) => {
-      objectToIOT.command = CMD_GET_WIFI_CONFIG;
+      objectToIOT.command = CMD_GET_LORA_CONFIG;
       appendStatus(objectToIOT, colorINFO);
       // SET ACTION TO 'WiFi Config'
       document.querySelector("#action-outcome").innerHTML='WiFi Config';
