@@ -121,7 +121,8 @@ $(document).ready(() => {
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
       // set objectToIOT variables
       objectToIOT.office_name = officeName;
-      objectToIOT.greenhouse_name = element.parentElement.querySelector('h2.greenhouse-heading').innerHTML;
+      // objectToIOT.greenhouse_name = element.parentElement.querySelector('h2.greenhouse-heading').innerHTML;
+      objectToIOT.greenhouse_name = $(".greenhouse-heading > h2").html();
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
       objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
