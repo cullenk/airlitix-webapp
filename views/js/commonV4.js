@@ -171,12 +171,18 @@ $(document).ready(() => {
     //   addWaterIcon(objectToIOT);
     // });
  
+    // Reset and Hide elements when selecting ADMIN->USER mode
+    $('.toggle-handle').on('click', '.toggle-div' , (element) => {
+        gearSelected = false;
+    });
+
     // Reset and Hide elements when selecting USER->ADMIN mode
     $('.toggle-handle').on('click', '.toggle-div .admin' , (element) => {
       greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
     
       // Show LOG and STATUS text boxes when selecting USER->ADMIN mode
-      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
+      // document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='none';
 
       // Change ACTION string to '' if ACTION is NOT WATER or MAPPING
       if (($(".action-outcome").html() !== 'Water') && ($(".action-outcome").html() !== 'Mapping')) {

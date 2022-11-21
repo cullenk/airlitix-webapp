@@ -106,28 +106,12 @@ $(document).ready(() => {
       type: 'WEB'
     });
 
-    // OFFICE GEAR selected (ADMIN mode) 
+    // OFFICE GEAR selected or GREENHOUSE GEAR selected (ADMIN mode)
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
-      // set objectToIOT variables
-      // objectToIOT.office_name = document.querySelector('h3.office-title').innerHTML;
-      objectToIOT.office_name = officeName;
-      objectToIOT.destModuleType = OFFICE_MODULE_TYPE;
-      objectToIOT.greenhouse_name = '';
-      objectToIOT.bay_name =  '';
-      // appendStatus(objectToIOT, colorINFO);
-    });
-  
-    // GREENHOUSE GEAR selected (ADMIN mode)
-    $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
-      // set objectToIOT variables
-      objectToIOT.office_name = officeName;
-      // objectToIOT.greenhouse_name = element.parentElement.querySelector('h2.greenhouse-heading').innerHTML;
-      objectToIOT.greenhouse_name = $(".greenhouse-heading > h2").html();
-      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-      objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
-      objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
-      objectToIOT.bay_name =  '';
-      // appendStatus(objectToIOT, colorINFO);
+      // set objectToIOT variables according to OFFICE ro GREENHOUSE selected
+      objectToIOT.office_name = officeName; // Always the same no matter what OFFICE or GREENHOUSE selected
+      allModules.forEach(moduleGear);
+      gearSelected = true;
     });
 
     // GREENHOUSE selected (USER mode)
@@ -193,7 +177,8 @@ $(document).ready(() => {
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
     
       // Show LOG and STATUS text boxes when selecting ADMIN->USER
-      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
+      // document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='none';
 
       // Change ACTION string to '' if ACTION is NOT WATER or MAPPING
       if (($(".action-outcome").html() !== 'Water') && ($(".action-outcome").html() !== 'Mapping')) {
@@ -332,6 +317,22 @@ $(document).ready(() => {
       });
     });
 });
+
+function moduleGear(module) {
+  if (module.children[0].classList[1] == 'selected') {
+    if (module.children[1].children[0].innerHTML == 'Office') { // OFFICE MODULE selected
+      objectToIOT.destModuleType = OFFICE_MODULE_TYPE;
+      objectToIOT.greenhouse_name = '';
+      objectToIOT.bay_name = '';
+    } else { // GREENHOUSE MODULE selected
+      objectToIOT.greenhouse_name = module.children[1].children[0].innerHTML;
+      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
+      objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
+      objectToIOT.bay_name = '';
+    } // else
+  } // if (selected)
+}
 
 // Add WATER ICON before BAY location text
 function addWaterIcon(objectToIOT) {
