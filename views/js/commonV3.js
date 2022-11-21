@@ -139,7 +139,7 @@ $(document).ready(() => {
       // set Selected BAY Name in LOCATION
       document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
       // add default WATER icon to BAY LOCATION
-      addWaterIcon(objectToIOT);
+      // addWaterIcon(objectToIOT);
       // appendStatus(objectToIOT, colorINFO);
     });
 
@@ -244,11 +244,13 @@ $(document).ready(() => {
     // WATER menu button selected
     $('.water').on('click', (element) => {
       objectToIOT.command = CMD_GET_LCD_DATA;
-      appendStatus(objectToIOT, colorINFO);
-      addWaterIcon(objectToIOT);
+      // addWaterIcon(objectToIOT);
+      // SET BAY NAME to WATER
+      document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY WATER: ";
       // SET ACTION TO 'Water'
       document.querySelector("#action-outcome").innerHTML='Water';
       // Send LCD DATA request to IOT
+      appendStatus(objectToIOT, colorINFO);
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -259,11 +261,13 @@ $(document).ready(() => {
     // MAPPING menu button selected
     $('.mapping').on('click', (element) => {
       objectToIOT.command = CMD_GET_MAP_DATA;
-      appendStatus(objectToIOT, colorINFO);
-      addMapIcon(objectToIOT);
+      // addMapIcon(objectToIOT);
+      // SET BAY NAME to MAP
+      document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
       // SET ACTION TO 'Mapping'
       document.querySelector("#action-outcome").innerHTML='Mapping';
       // Send MAP DATA request to IOT
+      appendStatus(objectToIOT, colorINFO);
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -274,10 +278,10 @@ $(document).ready(() => {
     // WIFI-STATUS menu button selected
     $('.wifi').on('click', (element) => {
       objectToIOT.command = CMD_GET_LORA_STATUS;
-      appendStatus(objectToIOT, colorINFO);
       // SET ACTION TO 'WiFi Status'
       document.querySelector("#action-outcome").innerHTML='WiFi Status';
       // Send WiFi STATUS request to IOT
+      appendStatus(objectToIOT, colorINFO);
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -288,10 +292,10 @@ $(document).ready(() => {
     // WIFI-CONFIG menu button selected
     $('.wifi-config').on('click', (element) => {
       objectToIOT.command = CMD_GET_LORA_CONFIG;
-      appendStatus(objectToIOT, colorINFO);
       // SET ACTION TO 'WiFi Config'
       document.querySelector("#action-outcome").innerHTML='WiFi Config';
       // Send WiFi CONFIG request to IOT
+      appendStatus(objectToIOT, colorINFO);
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -302,10 +306,10 @@ $(document).ready(() => {
     // MCU-STATUS menu button selected
     $('.mpu').on('click', (element) => {
       objectToIOT.command = CMD_GET_MCU_STATUS;
-      appendStatus(objectToIOT, colorINFO);
       // SET ACTION TO 'MCU Status'
       document.querySelector("#action-outcome").innerHTML='MCU Status';
       // Send MCU STATUS request to IOT
+      appendStatus(objectToIOT, colorINFO);
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -316,10 +320,10 @@ $(document).ready(() => {
     // MCU-CONFIG menu button selected
     $('.mpu-config').on('click', (element) => {
       objectToIOT.command = CMD_GET_MCU_CONFIG;
-      appendStatus(objectToIOT, colorINFO);
       // SET ACTION TO 'MCU Config'
       document.querySelector("#action-outcome").innerHTML='MCU Config';
       // Send MCU CONFIG request to IOT
+      appendStatus(objectToIOT, colorINFO);
       socket.emit('toiot', {
         receiverId: wifiClient,
         senderId: socket.id,
@@ -328,59 +332,59 @@ $(document).ready(() => {
     });
 });
 
-// Add WATER ICON before BAY location text
-function addWaterIcon(objectToIOT) {
-    // Get selected greenhouse
-    let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+// // Add WATER ICON before BAY location text
+// function addWaterIcon(objectToIOT) {
+//     // Get selected greenhouse
+//     let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
 
-    // If MAP ICON is up, remove it
-    if (mapIconFLAG == true) {
-        document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)`).remove();
-        mapIconFLAG = false;
-    }
-    // If WATER ICON is NOT up, add it
-    if (waterIconFLAG == false) {
-        var el = document.createElement("div");
-        el.className = "bay-icon-container-water";
-        document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
-        $(document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
-        waterIconFLAG = true;
-    }
-    // Set TARGETTYPE to BAYWATER
-    objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
-    document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "none";
-    document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "block";
-    document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
-    // SET ACTION TO 'Water'
-    document.querySelector("#action-outcome").innerHTML='Water';
-}
+//     // If MAP ICON is up, remove it
+//     if (mapIconFLAG == true) {
+//         document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)`).remove();
+//         mapIconFLAG = false;
+//     }
+//     // If WATER ICON is NOT up, add it
+//     if (waterIconFLAG == false) {
+//         var el = document.createElement("div");
+//         el.className = "bay-icon-container-water";
+//         document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
+//         $(document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
+//         waterIconFLAG = true;
+//     }
+//     // Set TARGETTYPE to BAYWATER
+//     objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
+//     document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "none";
+//     document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "block";
+//     document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
+//     // SET ACTION TO 'Water'
+//     document.querySelector("#action-outcome").innerHTML='Water';
+// }
 
-// Add MAP ICON before BAY location text
-function addMapIcon(objectToIOT) {
-    // Get selected greenhouse
-    let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+// // Add MAP ICON before BAY location text
+// function addMapIcon(objectToIOT) {
+//     // Get selected greenhouse
+//     let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
 
-    // If WATER ICON is up, remove it
-    if (waterIconFLAG == true) {
-        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)").remove();
-        waterIconFLAG = false;
-    }
-    // If MAP ICON is NOT up, add it
-    if (mapIconFLAG == false) {
-        var el = document.createElement("div");
-        el.className = "bay-icon-container-map success";
-        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
-        $(document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2")).before(el);
-        mapIconFLAG = true;
-    }
-    // Set TARGETTYPE to BAYMAP
-    objectToIOT.destModuleType = BAYMAP_MODULE_TYPE;
-    document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "none";
-    document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "block";
-    document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
-    // SET ACTION TO 'Mapping'
-    document.querySelector("#action-outcome").innerHTML='Mapping';
-}
+//     // If WATER ICON is up, remove it
+//     if (waterIconFLAG == true) {
+//         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)").remove();
+//         waterIconFLAG = false;
+//     }
+//     // If MAP ICON is NOT up, add it
+//     if (mapIconFLAG == false) {
+//         var el = document.createElement("div");
+//         el.className = "bay-icon-container-map success";
+//         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
+//         $(document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2")).before(el);
+//         mapIconFLAG = true;
+//     }
+//     // Set TARGETTYPE to BAYMAP
+//     objectToIOT.destModuleType = BAYMAP_MODULE_TYPE;
+//     document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "none";
+//     document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "block";
+//     document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
+//     // SET ACTION TO 'Mapping'
+//     document.querySelector("#action-outcome").innerHTML='Mapping';
+// }
 
 // Print colored "msg" to LOG text box
 function appendLogs(msg, color, ObjectIOT) {
