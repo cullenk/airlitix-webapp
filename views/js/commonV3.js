@@ -110,6 +110,7 @@ $(document).ready(() => {
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
       // set objectToIOT variables according to OFFICE ro GREENHOUSE selected
       objectToIOT.office_name = officeName; // Always the same no matter what OFFICE or GREENHOUSE selected
+      allModules = document.getElementsByClassName('w-layout-grid greenhouse-grid')[0].children;
       allModules.forEach(moduleGear);
       gearSelected = true;
     });
