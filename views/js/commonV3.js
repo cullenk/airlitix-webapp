@@ -128,27 +128,39 @@ $(document).ready(() => {
       // set objectToIOT variables
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
+      objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
+
+      // set Selected GH Name in LOCATION
+      document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[2].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[3].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[4].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+
+      // set Selected BAY Name in LOCATION
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
-      objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
-      // set Selected GH Name in LOCATION
-      document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
-      // set Selected BAY Name in LOCATION
-      // document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
-      document.querySelector("#bay-outcome-num").innerHTML = objectToIOT.bay_name;
-      // add default WATER icon to BAY LOCATION
-      // addWaterIcon(objectToIOT);
-      // appendStatus(objectToIOT, colorINFO);
+      document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[5].children[1].children[1].innerHTML = objectToIOT.bay_name;
     });
 
     // BAY selected
     $('.bay-div').on('click', (element) => {
       // set Selected GH Name in LOCATION
-      document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
-      // set objectToIOT variables
+      document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[2].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[3].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      document.getElementsByClassName('locations')[4].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      
+      // set Selected BAY Name in LOCATION
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
@@ -157,21 +169,22 @@ $(document).ready(() => {
         bayType = "M";
       }
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
+      document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      document.getElementsByClassName('locations')[5].children[1].children[1].innerHTML = objectToIOT.bay_name;
 
-      // set LOCATION info
-      // set Selected GH Name in LOCATION
-      document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
-      // document.querySelector("#bay-outcome-num").innerHTML = element.currentTarget.children[0].innerHTML;
-      document.querySelector("#bay-outcome-num").innerHTML = objectToIOT.bay_name;
-      // appendStatus(objectToIOT, colorINFO);
-
-      // if ($(".action-outcome").html() !== ' ') {
-      //   socket.emit('toiot', {
-      //     receiverId: wifiClient,
-      //     senderId: socket.id,
-      //     msg: objectToIOT
-      //   });
-      // }
+      // Send JSON to IOT for newly selected bay
+      appendStatus(objectToIOT, colorINFO);
+      // if ($(".action-outcome").html() == 'Water') {
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      // } // if
     });
 
     // // LOCATION CONTAINER BAY WATER icon selected - toggle to MAP icon
