@@ -329,7 +329,7 @@ function moduleGear(module) {
       objectToIOT.bay_name = '';
     } // else
   } // if (selected)
-};
+}
 
 // Add WATER ICON before BAY location text
 function addWaterIcon(objectToIOT) {
