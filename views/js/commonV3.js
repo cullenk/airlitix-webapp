@@ -80,6 +80,9 @@ $(document).ready(() => {
     });
 
     let officeName = $(".office-div > h3").html();
+    let greenhouseNumber = 1;
+    let bayNumber = 1;
+    let bayType = "W";
 
     socket.on('WIFI-CLIENT-CONNECTED', (data) => {
       if (data.socketId) {
@@ -131,50 +134,32 @@ $(document).ready(() => {
       objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
 
       // set Selected GH Name in LOCATION
-      document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[2].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[3].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[4].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      setGHLocationData();
 
       // set Selected BAY Name in LOCATION
-      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
       objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
-      let bayNumber = +objectToIOT.bay_name.split(" ")[1];
+      bayNumber = +objectToIOT.bay_name.split(" ")[1];
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
-      document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[5].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      setBAYLocationData();
     });
 
     // BAY selected
     $('.bay-div').on('click', (element) => {
       // set Selected GH Name in LOCATION
-      document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[2].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[3].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-      document.getElementsByClassName('locations')[4].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+      setGHLocationData();
       
       // set Selected BAY Name in LOCATION
-      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
-      let bayNumber = +objectToIOT.bay_name.split(" ")[1];
-      let bayType = "W";
+      bayNumber = +objectToIOT.bay_name.split(" ")[1];
+      bayType = "W";
       if (objectToIOT.destModuleType == BAYMAP_MODULE_TYPE) {
         bayType = "M";
       }
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
-      document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
-      document.getElementsByClassName('locations')[5].children[1].children[1].innerHTML = objectToIOT.bay_name;
+      setBAYLocationData();
 
       // Send JSON to IOT for newly selected bay
       appendStatus(objectToIOT, colorINFO);
@@ -201,7 +186,7 @@ $(document).ready(() => {
  
     // Reset/Hide elements when selecting ADMIN->USER mode
     $('.toggle-handle').on('click', '.toggle-div .admin' , (element) => {
-      let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
     
       // Show LOG and STATUS text boxes when selecting ADMIN->USER
       // document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
@@ -263,6 +248,10 @@ $(document).ready(() => {
       if (document.getElementsByClassName('operation-icon water active').length == 0) {
         objectToIOT.command = CMD_GET_LCD_DATA;
         // addWaterIcon(objectToIOT);
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
+        // set Selected BAY Name in LOCATION
+        setBAYLocationData();
         // SET BAY NAME to WATER
         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY WATER: ";
         // SET ACTION TO 'Water'
@@ -282,6 +271,10 @@ $(document).ready(() => {
       if (document.getElementsByClassName('operation-icon mapping active').length == 0) {
         objectToIOT.command = CMD_GET_MAP_DATA;
         // addMapIcon(objectToIOT);
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
+        // set Selected BAY Name in LOCATION
+        setBAYLocationData();
         // SET BAY NAME to MAP
         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
         // SET ACTION TO 'Mapping'
@@ -300,6 +293,10 @@ $(document).ready(() => {
     $('.wifi').on('click', (element) => {
       if (document.getElementsByClassName('operation-icon wifi active').length == 0) {
         objectToIOT.command = CMD_GET_LORA_STATUS;
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
+        // set Selected BAY Name in LOCATION
+        setBAYLocationData();
         // SET ACTION TO 'WiFi Status'
         document.querySelector("#action-outcome").innerHTML='WiFi Status';
         // Send WiFi STATUS request to IOT
@@ -316,6 +313,10 @@ $(document).ready(() => {
     $('.wifi-config').on('click', (element) => {
       if (document.getElementsByClassName('operation-icon wifi-config active').length == 0) {
         objectToIOT.command = CMD_GET_LORA_CONFIG;
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
+        // set Selected BAY Name in LOCATION
+        setBAYLocationData();
         // SET ACTION TO 'WiFi Config'
         document.querySelector("#action-outcome").innerHTML='WiFi Config';
         // Send WiFi CONFIG request to IOT
@@ -332,6 +333,10 @@ $(document).ready(() => {
     $('.mpu').on('click', (element) => {
       if (document.getElementsByClassName('operation-icon mpu active').length == 0) {
         objectToIOT.command = CMD_GET_MCU_STATUS;
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
+        // set Selected BAY Name in LOCATION
+        setBAYLocationData();
         // SET ACTION TO 'MCU Status'
         document.querySelector("#action-outcome").innerHTML='MCU Status';
         // Send MCU STATUS request to IOT
@@ -348,6 +353,10 @@ $(document).ready(() => {
     $('.mpu-config').on('click', (element) => {
       if (document.getElementsByClassName('operation-icon mpu-config active').length == 0) {
         objectToIOT.command = CMD_GET_MCU_CONFIG;
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
+        // set Selected BAY Name in LOCATION
+        setBAYLocationData();
         // SET ACTION TO 'MCU Config'
         document.querySelector("#action-outcome").innerHTML='MCU Config';
         // Send MCU CONFIG request to IOT
@@ -415,6 +424,30 @@ $(document).ready(() => {
 //     document.querySelector("#action-outcome").innerHTML='Mapping';
 // }
 
+function setBAYLocationData() {
+  // set Selected BAY Name in LOCATION
+  // greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+  // objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
+  // objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
+  // bayNumber = +objectToIOT.bay_name.split(" ")[1];
+  // objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
+  document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('locations')[5].children[1].children[1].innerHTML = objectToIOT.bay_name;
+}
+
+function setGHLocationData() {
+  // set Selected GH Name in LOCATION
+  document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('locations')[2].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('locations')[3].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('locations')[4].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+}
+
 // Print colored "msg" to LOG text box
 function appendLogs(msg, color, ObjectIOT) {
     console.table('appendLogs', msg);
@@ -423,7 +456,7 @@ function appendLogs(msg, color, ObjectIOT) {
         $('.log-div').append(`<div class='log-text-content' style="font-size: 0.8vw; color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
           // Get selected greenhouse
-          let greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
+          greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
           $(".log-div").scrollTop($(".log-div")[greenhouseNumber].scrollHeight);
         } catch {}
     }
@@ -436,7 +469,7 @@ function appendStatus(msg, color) {
     if ($('.status-div').length) {
         $('.status-div').append(`<div class='status-text-content' style="font-size: 0.8vw; color: ${colorToHTML[color]};">${JSON.stringify(msg)}</div>`);
         try {
-          let greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
+          greenhouseNumber = +ObjectIOT.greenhouse_name.split(" ")[1];
           $(".status-div").scrollTop($(".status-div")[greenhouseNumber].scrollHeight);
         } catch {}
     }
