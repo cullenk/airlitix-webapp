@@ -426,17 +426,16 @@ $(document).ready(() => {
 
 function setBAYLocationData() {
   // set Selected BAY Name in LOCATION
-  // greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-  // objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
-  // objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
-  // bayNumber = +objectToIOT.bay_name.split(" ")[1];
-  // objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
+  greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+  objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
+  objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
+  bayNumber = +objectToIOT.bay_name.split(" ")[1];
+  objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
   document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
   document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
   document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
   document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
   document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
-  document.getElementsByClassName('locations')[5].children[1].children[1].innerHTML = objectToIOT.bay_name;
 }
 
 function setGHLocationData() {
