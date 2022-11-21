@@ -126,7 +126,6 @@ $(document).ready(() => {
       let bayNumber = +objectToIOT.bay_name.split(" ")[1];
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
       // set Selected GH Name in LOCATION
-      // document.querySelector("#gh-outcome-num").innerHTML = document.querySelector("#greenhouse-1-view > div.bay-info-div > div.bay-heading-div > h1").innerHTML;
       document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
       // set Selected BAY Name in LOCATION
       document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
@@ -137,6 +136,8 @@ $(document).ready(() => {
 
     // BAY selected
     $('.bay-div').on('click', (element) => {
+      // set Selected GH Name in LOCATION
+      document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
       // set objectToIOT variables
       let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
       objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
@@ -348,7 +349,7 @@ function addWaterIcon(objectToIOT) {
     if (waterIconFLAG == false) {
         var el = document.createElement("div");
         el.className = "bay-icon-container-water";
-        document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
+        // document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
         $(document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
         waterIconFLAG = true;
     }
@@ -375,7 +376,7 @@ function addMapIcon(objectToIOT) {
     if (mapIconFLAG == false) {
         var el = document.createElement("div");
         el.className = "bay-icon-container-map success";
-        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
+        // document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
         $(document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2")).before(el);
         mapIconFLAG = true;
     }
