@@ -110,9 +110,17 @@ $(document).ready(() => {
     $('#all-greenhouses-view').on('click', '.greenhouse-grid .greenhouse-cell-div .gear-div', (element) => {
       // set objectToIOT variables according to OFFICE ro GREENHOUSE selected
       objectToIOT.office_name = officeName; // Always the same no matter what OFFICE or GREENHOUSE selected
-      allModules = document.getElementsByClassName('w-layout-grid greenhouse-grid')[0].children;
-      allModules.forEach(moduleGear);
-      gearSelected = true;
+      objectToIOT.greenhouse_name = document.getElementsByClassName('gear-div selected')[0].parentElement.children[1].children[0].innerHTML;
+      if (objectToIOT.greenhouse_name == 'Office') { // OFFICE MODULE selected
+        objectToIOT.destModuleType = OFFICE_MODULE_TYPE;
+        objectToIOT.greenhouse_name = '';
+        objectToIOT.bay_name = '';
+      } else { // GREENHOUSE MODULE selected
+        objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
+        greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+        objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
+        objectToIOT.bay_name = '';
+      } // else
     });
 
     // GREENHOUSE selected (USER mode)
@@ -319,22 +327,6 @@ $(document).ready(() => {
       });
     });
 });
-
-function moduleGear(module) {
-  if (module.children[0].classList[1] == 'selected') {
-    if (module.children[1].children[0].innerHTML == 'Office') { // OFFICE MODULE selected
-      objectToIOT.destModuleType = OFFICE_MODULE_TYPE;
-      objectToIOT.greenhouse_name = '';
-      objectToIOT.bay_name = '';
-    } else { // GREENHOUSE MODULE selected
-      objectToIOT.greenhouse_name = module.children[1].children[0].innerHTML;
-      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-      objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
-      objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
-      objectToIOT.bay_name = '';
-    } // else
-  } // if (selected)
-}
 
 // Add WATER ICON before BAY location text
 function addWaterIcon(objectToIOT) {
