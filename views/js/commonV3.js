@@ -342,7 +342,7 @@ function addWaterIcon(objectToIOT) {
     if (waterIconFLAG == false) {
         var el = document.createElement("div");
         el.className = "bay-icon-container-water";
-        // document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
+        document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
         $(document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
         waterIconFLAG = true;
     }
@@ -369,7 +369,7 @@ function addMapIcon(objectToIOT) {
     if (mapIconFLAG == false) {
         var el = document.createElement("div");
         el.className = "bay-icon-container-map success";
-        // document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
+        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
         $(document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2")).before(el);
         mapIconFLAG = true;
     }
