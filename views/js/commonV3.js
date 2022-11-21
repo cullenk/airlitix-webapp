@@ -137,7 +137,8 @@ $(document).ready(() => {
       // set Selected GH Name in LOCATION
       document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
       // set Selected BAY Name in LOCATION
-      document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
+      // document.querySelector("#bay-outcome-num").innerHTML = document.getElementsByClassName('bay-div selected')[0].innerText;
+      document.querySelector("#bay-outcome-num").innerHTML = objectToIOT.bay_name;
       // add default WATER icon to BAY LOCATION
       // addWaterIcon(objectToIOT);
       // appendStatus(objectToIOT, colorINFO);
@@ -157,8 +158,11 @@ $(document).ready(() => {
       }
       objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
 
-      // set Selected BAY Name in LOCATION
-      document.querySelector("#bay-outcome-num").innerHTML = element.currentTarget.children[0].innerHTML;
+      // set LOCATION info
+      // set Selected GH Name in LOCATION
+      document.querySelector("#gh-outcome-num").innerHTML = objectToIOT.greenhouse_name;
+      // document.querySelector("#bay-outcome-num").innerHTML = element.currentTarget.children[0].innerHTML;
+      document.querySelector("#bay-outcome-num").innerHTML = objectToIOT.bay_name;
       // appendStatus(objectToIOT, colorINFO);
 
       // if ($(".action-outcome").html() !== ' ') {
@@ -243,92 +247,104 @@ $(document).ready(() => {
 
     // WATER menu button selected
     $('.water').on('click', (element) => {
-      objectToIOT.command = CMD_GET_LCD_DATA;
-      // addWaterIcon(objectToIOT);
-      // SET BAY NAME to WATER
-      document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY WATER: ";
-      // SET ACTION TO 'Water'
-      document.querySelector("#action-outcome").innerHTML='Water';
-      // Send LCD DATA request to IOT
-      appendStatus(objectToIOT, colorINFO);
-      socket.emit('toiot', {
-        receiverId: wifiClient,
-        senderId: socket.id,
-        msg: objectToIOT
-      });
+      if (document.getElementsByClassName('operation-icon water active').length == 0) {
+        objectToIOT.command = CMD_GET_LCD_DATA;
+        // addWaterIcon(objectToIOT);
+        // SET BAY NAME to WATER
+        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY WATER: ";
+        // SET ACTION TO 'Water'
+        document.querySelector("#action-outcome").innerHTML='Water';
+        // Send LCD DATA request to IOT
+        appendStatus(objectToIOT, colorINFO);
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      } // if
     });
 
     // MAPPING menu button selected
     $('.mapping').on('click', (element) => {
-      objectToIOT.command = CMD_GET_MAP_DATA;
-      // addMapIcon(objectToIOT);
-      // SET BAY NAME to MAP
-      document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
-      // SET ACTION TO 'Mapping'
-      document.querySelector("#action-outcome").innerHTML='Mapping';
-      // Send MAP DATA request to IOT
-      appendStatus(objectToIOT, colorINFO);
-      socket.emit('toiot', {
-        receiverId: wifiClient,
-        senderId: socket.id,
-        msg: objectToIOT
-      });
+      if (document.getElementsByClassName('operation-icon mapping active').length == 0) {
+        objectToIOT.command = CMD_GET_MAP_DATA;
+        // addMapIcon(objectToIOT);
+        // SET BAY NAME to MAP
+        document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
+        // SET ACTION TO 'Mapping'
+        document.querySelector("#action-outcome").innerHTML='Mapping';
+        // Send MAP DATA request to IOT
+        appendStatus(objectToIOT, colorINFO);
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      } // if
     });
 
     // WIFI-STATUS menu button selected
     $('.wifi').on('click', (element) => {
-      objectToIOT.command = CMD_GET_LORA_STATUS;
-      // SET ACTION TO 'WiFi Status'
-      document.querySelector("#action-outcome").innerHTML='WiFi Status';
-      // Send WiFi STATUS request to IOT
-      appendStatus(objectToIOT, colorINFO);
-      socket.emit('toiot', {
-        receiverId: wifiClient,
-        senderId: socket.id,
-        msg: objectToIOT
-      });
+      if (document.getElementsByClassName('operation-icon wifi active').length == 0) {
+        objectToIOT.command = CMD_GET_LORA_STATUS;
+        // SET ACTION TO 'WiFi Status'
+        document.querySelector("#action-outcome").innerHTML='WiFi Status';
+        // Send WiFi STATUS request to IOT
+        appendStatus(objectToIOT, colorINFO);
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      } // if
     });
 
     // WIFI-CONFIG menu button selected
     $('.wifi-config').on('click', (element) => {
-      objectToIOT.command = CMD_GET_LORA_CONFIG;
-      // SET ACTION TO 'WiFi Config'
-      document.querySelector("#action-outcome").innerHTML='WiFi Config';
-      // Send WiFi CONFIG request to IOT
-      appendStatus(objectToIOT, colorINFO);
-      socket.emit('toiot', {
-        receiverId: wifiClient,
-        senderId: socket.id,
-        msg: objectToIOT
-      });
+      if (document.getElementsByClassName('operation-icon wifi-config active').length == 0) {
+        objectToIOT.command = CMD_GET_LORA_CONFIG;
+        // SET ACTION TO 'WiFi Config'
+        document.querySelector("#action-outcome").innerHTML='WiFi Config';
+        // Send WiFi CONFIG request to IOT
+        appendStatus(objectToIOT, colorINFO);
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      } // if
     });
 
     // MCU-STATUS menu button selected
     $('.mpu').on('click', (element) => {
-      objectToIOT.command = CMD_GET_MCU_STATUS;
-      // SET ACTION TO 'MCU Status'
-      document.querySelector("#action-outcome").innerHTML='MCU Status';
-      // Send MCU STATUS request to IOT
-      appendStatus(objectToIOT, colorINFO);
-      socket.emit('toiot', {
-        receiverId: wifiClient,
-        senderId: socket.id,
-        msg: objectToIOT
-      });
+      if (document.getElementsByClassName('operation-icon mpu active').length == 0) {
+        objectToIOT.command = CMD_GET_MCU_STATUS;
+        // SET ACTION TO 'MCU Status'
+        document.querySelector("#action-outcome").innerHTML='MCU Status';
+        // Send MCU STATUS request to IOT
+        appendStatus(objectToIOT, colorINFO);
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      } // if
     });
 
     // MCU-CONFIG menu button selected
     $('.mpu-config').on('click', (element) => {
-      objectToIOT.command = CMD_GET_MCU_CONFIG;
-      // SET ACTION TO 'MCU Config'
-      document.querySelector("#action-outcome").innerHTML='MCU Config';
-      // Send MCU CONFIG request to IOT
-      appendStatus(objectToIOT, colorINFO);
-      socket.emit('toiot', {
-        receiverId: wifiClient,
-        senderId: socket.id,
-        msg: objectToIOT
-      });
+      if (document.getElementsByClassName('operation-icon mpu-config active').length == 0) {
+        objectToIOT.command = CMD_GET_MCU_CONFIG;
+        // SET ACTION TO 'MCU Config'
+        document.querySelector("#action-outcome").innerHTML='MCU Config';
+        // Send MCU CONFIG request to IOT
+        appendStatus(objectToIOT, colorINFO);
+        socket.emit('toiot', {
+          receiverId: wifiClient,
+          senderId: socket.id,
+          msg: objectToIOT
+        });
+      } // if
     });
 });
 
