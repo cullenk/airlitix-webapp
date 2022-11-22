@@ -157,7 +157,7 @@ $(document).ready(() => {
  
     // Reset/Hide elements when selecting ADMIN->USER mode
     $('.toggle-handle').on('click', '.toggle-div .admin' , (element) => {
-      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
     
       // Show LOG and STATUS text boxes when selecting ADMIN->USER
       // document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
@@ -343,9 +343,9 @@ $(document).ready(() => {
 
 function setBAYLocationData() {
   // set Selected BAY Name in LOCATION
-  greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+  greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
   objectToIOT.bay_name =  document.getElementsByClassName("bay-div selected")[0].children[0].innerHTML;
-  bayNumber = +objectToIOT.bay_name.split(" ")[1];
+  bayNumber = objectToIOT.bay_name.split(" ")[1];
   bayType = "W";
   if (objectToIOT.destModuleType == BAYMAP_MODULE_TYPE) {
     bayType = "M";
@@ -360,7 +360,7 @@ function setBAYLocationData() {
 
 function setGHLocationData() {
   greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
-  objectToIOT.greenhouse_name = "GH" + greenhouseNumber;
+  objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
   // set Selected GH Name in LOCATION
   document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
   document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
