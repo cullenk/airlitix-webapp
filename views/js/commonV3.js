@@ -369,7 +369,7 @@ function initLocationNames() {
   document.getElementsByClassName('action-outcome')[4].innerHTML = "WATER";
 }
 function setBAYLocationData() {
-  // set Selected BAY Name in LOCATION
+  // set Selected BAY Name in LOCATION LOCATION
   greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
   objectToIOT.bay_name =  document.getElementsByClassName("bay-div selected")[0].children[0].innerHTML;
   bayNumber = objectToIOT.bay_name.split(" ")[1];
