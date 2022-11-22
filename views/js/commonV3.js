@@ -120,8 +120,8 @@ $(document).ready(() => {
         objectToIOT.bay_name = '';
       } else { // GREENHOUSE MODULE selected
         objectToIOT.destModuleType = GREENHOUSE_MODULE_TYPE;
-        greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-        objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
+        // set Selected GH Name in LOCATION
+        setGHLocationData();
         objectToIOT.bay_name = '';
       } // else
     });
@@ -132,16 +132,9 @@ $(document).ready(() => {
       objectToIOT.office_name = officeName;
       objectToIOT.greenhouse_name = element.currentTarget.children[0].innerHTML;
       objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
-
       // set Selected GH Name in LOCATION
       setGHLocationData();
-
       // set Selected BAY Name in LOCATION
-      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-      objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
-      objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
-      bayNumber = +objectToIOT.bay_name.split(" ")[1];
-      objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
       setBAYLocationData();
     });
 
@@ -149,18 +142,8 @@ $(document).ready(() => {
     $('.bay-div').on('click', (element) => {
       // set Selected GH Name in LOCATION
       setGHLocationData();
-      
       // set Selected BAY Name in LOCATION
-      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-      objectToIOT.bay_name = element.currentTarget.children[0].innerHTML;
-      bayNumber = +objectToIOT.bay_name.split(" ")[1];
-      bayType = "W";
-      if (objectToIOT.destModuleType == BAYMAP_MODULE_TYPE) {
-        bayType = "M";
-      }
-      objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
       setBAYLocationData();
-
       // Send JSON to IOT for newly selected bay
       appendStatus(objectToIOT, colorINFO);
       // if ($(".action-outcome").html() == 'Water') {
@@ -171,22 +154,11 @@ $(document).ready(() => {
         });
       // } // if
     });
-
-    // // LOCATION CONTAINER BAY WATER icon selected - toggle to MAP icon
-    // $('.location-container').on('click', 'bay-icon-container-water', (element) => {
-    //   // add MAP icon to BAY LOCATION
-    //   addMapIcon(objectToIOT);
-    // });
-
-    // // LOCATION CONTAINER BAY MAP icon selected - toggle to WATER icon
-    // $('.location-container').on('click', 'bay-icon-container-map', (element) => {
-    //   // add WATER icon to BAY LOCATION
-    //   addWaterIcon(objectToIOT);
-    // });
  
     // Reset/Hide elements when selecting ADMIN->USER mode
     $('.toggle-handle').on('click', '.toggle-div .admin' , (element) => {
-      greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      // greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+      greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
     
       // Show LOG and STATUS text boxes when selecting ADMIN->USER
       // document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
@@ -370,67 +342,18 @@ $(document).ready(() => {
     });
 });
 
-// // Add WATER ICON before BAY location text
-// function addWaterIcon(objectToIOT) {
-//     // Get selected greenhouse
-//     let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-
-//     // If MAP ICON is up, remove it
-//     if (mapIconFLAG == true) {
-//         document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)`).remove();
-//         mapIconFLAG = false;
-//     }
-//     // If WATER ICON is NOT up, add it
-//     if (waterIconFLAG == false) {
-//         var el = document.createElement("div");
-//         el.className = "bay-icon-container-water";
-//         document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`).innerHTML="BAY WATER: ";
-//         $(document.querySelector(`#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2`)).before(el);
-//         waterIconFLAG = true;
-//     }
-//     // Set TARGETTYPE to BAYWATER
-//     objectToIOT.destModuleType = BAYWATER_MODULE_TYPE;
-//     document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "none";
-//     document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "block";
-//     document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
-//     // SET ACTION TO 'Water'
-//     document.querySelector("#action-outcome").innerHTML='Water';
-// }
-
-// // Add MAP ICON before BAY location text
-// function addMapIcon(objectToIOT) {
-//     // Get selected greenhouse
-//     let greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-
-//     // If WATER ICON is up, remove it
-//     if (waterIconFLAG == true) {
-//         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > div:nth-child(1)").remove();
-//         waterIconFLAG = false;
-//     }
-//     // If MAP ICON is NOT up, add it
-//     if (mapIconFLAG == false) {
-//         var el = document.createElement("div");
-//         el.className = "bay-icon-container-map success";
-//         document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2").innerHTML="BAY MAP: ";
-//         $(document.querySelector("#greenhouse-1-view > div.right-info-div > div.outcome-header > div > div:nth-child(2) > h2")).before(el);
-//         mapIconFLAG = true;
-//     }
-//     // Set TARGETTYPE to BAYMAP
-//     objectToIOT.destModuleType = BAYMAP_MODULE_TYPE;
-//     document.getElementsByClassName('water-panel-container')[greenhouseNumber-1].style.display = "none";
-//     document.getElementsByClassName('mapping-container')[greenhouseNumber-1].style.display = "block";
-//     document.getElementsByClassName('outcome-view')[greenhouseNumber-1].style.display = "flex";
-//     // SET ACTION TO 'Mapping'
-//     document.querySelector("#action-outcome").innerHTML='Mapping';
-// }
-
 function setBAYLocationData() {
   // set Selected BAY Name in LOCATION
-  greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
-  objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
-  objectToIOT.bay_name =  $(".bay-div.selected > h3.bay-heading")[0].innerHTML;
-  bayNumber = +objectToIOT.bay_name.split(" ")[1];
-  objectToIOT.bay_name = "GH" + greenhouseNumber + "BAYW" + bayNumber;
+  // greenhouseNumber = +objectToIOT.greenhouse_name.split(" ")[1];
+  greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
+  objectToIOT.bay_name =  document.getElementsByClassName("bay-div selected")[0].children[0].innerHTML;
+  // bayNumber = +objectToIOT.bay_name.split(" ")[1];
+  bayNumber = objectToIOT.bay_name.split(" ")[1];
+  bayType = "W";
+  if (objectToIOT.destModuleType == BAYMAP_MODULE_TYPE) {
+    bayType = "M";
+  }
+  objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
   document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
   document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
   document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
