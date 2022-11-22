@@ -362,6 +362,8 @@ function setBAYLocationData() {
 }
 
 function setGHLocationData() {
+  greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
+  objectToIOT.greenhouse_name = "GH" + greenhouseNumber;
   // set Selected GH Name in LOCATION
   document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
   document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
