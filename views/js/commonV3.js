@@ -84,6 +84,8 @@ $(document).ready(() => {
     let bayNumber = 1;
     let bayType = "W";
 
+    initLocationNames();
+
     socket.on('WIFI-CLIENT-CONNECTED', (data) => {
       if (data.socketId) {
         wifiClient = data.socketId;
@@ -161,6 +163,7 @@ $(document).ready(() => {
     
       // Show LOG and STATUS text boxes when selecting ADMIN->USER
       // document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='flex';
+      // HIDE LOG and STATUS text boxes when selecting ADMIN->USER
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.right-info-div > div.outcome-view").style.display='none';
 
       // Change ACTION string to '' if ACTION is NOT WATER or MAPPING
@@ -171,14 +174,14 @@ $(document).ready(() => {
       // Hide any action boxes and unselect menu icons and menu text (but not for WATER or MAPPING)
       // ===== WiFi_STATUS
       // Hide WiFi_STATUS action box
-      document.querySelector("#greenhouse-3-view > div.main-action-div > div.wifi-container").style.display='none';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.main-action-div > div.wifi-container").style.display='none';
       // Hide WiFi_STATUS menu icon and text
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi > div.operation-icon.wifi").className='operation-icon mpu-config';
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi > div.home-operation-text").style.color='white';
       
       // ===== WiFI_CONFIG
       // Hide WiFI_CONFIG action box
-      document.querySelector("#greenhouse-3-view > div.main-action-div > div.wifi-config-container").style.display='none';
+      document.querySelector("#greenhouse-${greenhouseNumber}-view > div.main-action-div > div.wifi-config-container").style.display='none';
       // Hide WiFI_CONFIG menu icon and text
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.operation-icon.wifi-config").className='operation-icon mpu-config';
       document.querySelector("#greenhouse-${greenhouseNumber}-view > div.menu-container > div.admin-menu > div > div.admin-wifi-config > div.home-operation-text").style.color='white';
@@ -341,6 +344,30 @@ $(document).ready(() => {
     });
 });
 
+document.getElementsByClassName('gh-outcome-num')[0].innerHTML = objectToIOT.greenhouse_name;
+
+function initLocationNames() {
+  // Init all GH Names in LOCATION
+  objectToIOT.greenhouse_name = "GH 1";
+  document.getElementsByClassName('gh-outcome-num')[0].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[2].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[3].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[4].innerHTML = objectToIOT.greenhouse_name;
+  // Init all BAY Names in LOCATION
+  objectToIOT.bay_name = "GH1BAYW1";
+  document.getElementsByClassName('bay-outcome-num')[0].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[2].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[3].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[4].innerHTML = objectToIOT.bay_name;
+  // Init all ACTION Names in LOCATION
+  document.getElementsByClassName('action-outcome')[0].innerHTML = "WATER";
+  document.getElementsByClassName('action-outcome')[1].innerHTML = "WATER";
+  document.getElementsByClassName('action-outcome')[2].innerHTML = "WATER";
+  document.getElementsByClassName('action-outcome')[3].innerHTML = "WATER";
+  document.getElementsByClassName('action-outcome')[4].innerHTML = "WATER";
+}
 function setBAYLocationData() {
   // set Selected BAY Name in LOCATION
   greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
@@ -351,22 +378,22 @@ function setBAYLocationData() {
     bayType = "M";
   }
   objectToIOT.bay_name = "GH" + greenhouseNumber + "BAY" + bayType + bayNumber;
-  document.getElementsByClassName('locations')[0].children[1].children[1].innerHTML = objectToIOT.bay_name;
-  document.getElementsByClassName('locations')[1].children[1].children[1].innerHTML = objectToIOT.bay_name;
-  document.getElementsByClassName('locations')[2].children[1].children[1].innerHTML = objectToIOT.bay_name;
-  document.getElementsByClassName('locations')[3].children[1].children[1].innerHTML = objectToIOT.bay_name;
-  document.getElementsByClassName('locations')[4].children[1].children[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[0].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[1].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[2].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[3].innerHTML = objectToIOT.bay_name;
+  document.getElementsByClassName('bay-outcome-num')[4].innerHTML = objectToIOT.bay_name;
 }
 
 function setGHLocationData() {
   greenhouseNumber = objectToIOT.greenhouse_name.split(" ")[1];
   objectToIOT.greenhouse_name = "GH " + greenhouseNumber;
   // set Selected GH Name in LOCATION
-  document.getElementsByClassName('locations')[0].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-  document.getElementsByClassName('locations')[1].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-  document.getElementsByClassName('locations')[2].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-  document.getElementsByClassName('locations')[3].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
-  document.getElementsByClassName('locations')[4].children[0].children[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[0].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[1].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[2].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[3].innerHTML = objectToIOT.greenhouse_name;
+  document.getElementsByClassName('gh-outcome-num')[4].innerHTML = objectToIOT.greenhouse_name;
 }
 
 // Print colored "msg" to LOG text box
